@@ -24,45 +24,66 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
-      body: Padding(
-        padding: ScreenUtils.instance.defaultPadding,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // The header with ISATI logo and title
-            Center(child: Image.asset("assets/images/logo.png", width: 96,)),
-            Text("Connexion", textAlign: TextAlign.center, style: Theme.of(context).textTheme.headline1),
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+      ),
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          if (constraints.maxWidth >= ScreenUtils.instance.breakpointPC) {
+            return Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Expanded(child: _buildMainColumn()),
+                Expanded(child: Image.asset("assets/images/background.jpg", fit: BoxFit.cover,)),
+              ],
+            );
+          }
+
+          return _buildMainColumn();
+        }
+      ),
+    );
+  }
+
+  Widget _buildMainColumn() {
+    return Padding(
+      padding: ScreenUtils.instance.defaultPadding,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          // The header with ISATI logo and title
+          Center(child: Image.asset("assets/images/logo.png", width: 96,)),
+          Text("Connexion", textAlign: TextAlign.center, style: Theme.of(context).textTheme.headline1),
+          const SizedBox(height: 20,),
+          // A potential error message
+          if (_errorMessage.isNotEmpty) ...{
+            IsStatusMessage(
+              title: "Erreur lors de la connexion",
+              message: _errorMessage,
+            ),
             const SizedBox(height: 20,),
-            // A potential error message
-            if (_errorMessage.isNotEmpty) ...{
-              IsStatusMessage(
-                title: "Erreur lors de la connexion",
-                message: _errorMessage,
+          },
+          // The actual login form
+          // NB We show a progress indicator on loading
+          if (_isLoading)
+            const Expanded(child: Center(child: CircularProgressIndicator(),))
+          else ...{
+            Expanded(
+              child: LoginForm(
+                formKey: _loginFormKey,
+                emailTextController: _emailTextController,
+                passwordTextController: _passwordTextController,
               ),
-              const SizedBox(height: 20,),
-            },
-            // The actual login form
-            // NB We show a progress indicator on loading
-            if (_isLoading)
-              const Expanded(child: Center(child: CircularProgressIndicator(),))
-            else ...{
-              Expanded(
-                child: LoginForm(
-                  formKey: _loginFormKey,
-                  emailTextController: _emailTextController,
-                  passwordTextController: _passwordTextController,
-                ),
-              ),
-              const SizedBox(height: 20,),
-              IsButton(
-                text: "Se connecter",
-                onPressed: _onLoginPressed,
-              )
-            }
-          ],
-        ),
+            ),
+            const SizedBox(height: 20,),
+            IsButton(
+              text: "Se connecter",
+              onPressed: _onLoginPressed,
+            )
+          }
+        ],
       ),
     );
   }
