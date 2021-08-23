@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:isati_integration/utils/colors.dart';
 void main() {
   runApp(MyApp());
 }
@@ -7,10 +9,54 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        colorScheme: ColorScheme(
+          brightness: Brightness.light,
+          primary: colorPrimary,
+          primaryVariant: colorPrimaryVariant,
+          onPrimary: colorWhite,
+          secondary: colorSecondary,
+          secondaryVariant: colorSecondaryVariant,
+          onSecondary: colorWhite,
+          background: colorScaffolddWhite,
+          onBackground: colorBlack,
+          error: colorError,
+          onError: colorWhite,
+          surface: colorScaffolddWhite,
+          onSurface: colorBlack
+        ),
+
+        scaffoldBackgroundColor: colorScaffolddWhite,
+        dividerColor: const Color(0xffefefef),
+
+        textTheme: const TextTheme(
+          headline1: TextStyle(fontSize: 48, color: colorBlack),
+          headline2: TextStyle(fontSize: 40, color: colorBlack),
+          headline3: TextStyle(fontSize: 32, color: colorBlack),
+          headline4: TextStyle(fontSize: 28, fontWeight: FontWeight.w300, color: colorBlack),
+          headline5: TextStyle(fontSize: 21, fontWeight: FontWeight.bold, color: colorBlack),
+          headline6: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: colorBlack),
+          bodyText2: TextStyle(fontSize: 16),
+          button: TextStyle(fontSize: 16)
+        ),
+
+        appBarTheme: const AppBarTheme(
+          systemOverlayStyle: SystemUiOverlayStyle.light,
+          color: colorScaffolddWhite,
+          elevation: 0,
+          iconTheme: IconThemeData(color: colorBlack),
+          titleTextStyle: TextStyle(color: colorBlack, fontSize: 40)
+        ),
+
+        dividerTheme: const DividerThemeData(
+          color: Color(0xffedf1f7),
+          thickness: 1
+        ),
+
+        visualDensity: VisualDensity.standard, 
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: SafeArea(child: MyHomePage(title: 'ISATI Integration')),
     );
   }
 }
@@ -37,10 +83,10 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(
+            SelectableText(
               'You have pushed the button this many times:',
             ),
-            Text(
+            SelectableText(
               '$_counter',
               style: Theme.of(context).textTheme.headline4,
             ),
