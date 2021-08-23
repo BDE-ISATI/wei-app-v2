@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:isati_integration/utils/colors.dart';
 
 class IsTextInput extends StatefulWidget {
   const IsTextInput({
@@ -63,35 +64,40 @@ class _IsTextInput extends State<IsTextInput> {
       children: [
         Text(widget.labelText.toUpperCase(), style: const TextStyle(color: Colors.black54, fontSize: 12),),
         const SizedBox(height: 10.0,),
-        TextFormField(
-          readOnly: widget.readOnly,
-            key: widget.formKey,
-            obscureText: _obscureText,
-            controller: widget.controller,
-            keyboardType: widget.inputType,
-            maxLines: widget.maxLines,
-            decoration: InputDecoration(
-              hintText: widget.hintText,
-              enabledBorder: OutlineInputBorder(
-                borderSide: const BorderSide(color: Colors.black12,),
-                borderRadius: BorderRadius.circular(6.0),
+        Theme(
+          data: ThemeData(
+            primaryColor: colorSecondary
+          ),
+          child: TextFormField(
+            readOnly: widget.readOnly,
+              key: widget.formKey,
+              obscureText: _obscureText,
+              controller: widget.controller,
+              keyboardType: widget.inputType,
+              maxLines: widget.maxLines,
+              decoration: InputDecoration(
+                hintText: widget.hintText,
+                enabledBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Colors.black12,),
+                  borderRadius: BorderRadius.circular(6.0),
+                ),
+                border: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Colors.black12,),
+                  borderRadius: BorderRadius.circular(6.0),
+                ),
+                suffixIcon: widget.suffixIcon != null ? Icon(widget.suffixIcon) : !widget.obscureText ? null : InkWell(
+                  onTap: _textVisibilityUpdated,
+                  child: Icon(_obscureText ? Icons.visibility : Icons.visibility_off),
+                )
               ),
-              border: OutlineInputBorder(
-                borderSide: const BorderSide(color: Colors.black12,),
-                borderRadius: BorderRadius.circular(6.0),
-              ),
-              suffixIcon: widget.suffixIcon != null ? Icon(widget.suffixIcon) : !widget.obscureText ? null : InkWell(
-                onTap: _textVisibilityUpdated,
-                child: Icon(_obscureText ? Icons.visibility : Icons.visibility_off),
-              )
-            ),
-            validator: widget.validator == null ? null : (value) => widget.validator!(value ?? ""),
-            onSaved: widget.onSaved != null ? (value) => widget.onSaved!(value ?? "") : null,
-            onChanged: (value) {
-              if (widget.onChanged != null) {
-                widget.onChanged!(value);
+              validator: widget.validator == null ? null : (value) => widget.validator!(value ?? ""),
+              onSaved: widget.onSaved != null ? (value) => widget.onSaved!(value ?? "") : null,
+              onChanged: (value) {
+                if (widget.onChanged != null) {
+                  widget.onChanged!(value);
+                }
               }
-            }
+          ),
         ),
       ],
     );
