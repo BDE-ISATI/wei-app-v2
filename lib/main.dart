@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:isati_integration/src/pages/register_page/register_page.dart';
 import 'package:isati_integration/utils/colors.dart';
+import 'package:isati_integration/utils/screen_utils.dart';
 void main() {
   runApp(MyApp());
 }
@@ -11,7 +13,7 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        colorScheme: ColorScheme(
+        colorScheme: const ColorScheme(
           brightness: Brightness.light,
           primary: colorPrimary,
           primaryVariant: colorPrimaryVariant,
@@ -31,10 +33,10 @@ class MyApp extends StatelessWidget {
         dividerColor: const Color(0xffefefef),
 
         textTheme: const TextTheme(
-          headline1: TextStyle(fontSize: 48, color: colorBlack),
-          headline2: TextStyle(fontSize: 40, color: colorBlack),
-          headline3: TextStyle(fontSize: 32, color: colorBlack),
-          headline4: TextStyle(fontSize: 28, fontWeight: FontWeight.w300, color: colorBlack),
+          headline1: TextStyle(fontSize: 36, color: colorBlack),
+          headline2: TextStyle(fontSize: 32, color: colorBlack),
+          headline3: TextStyle(fontSize: 28, color: colorBlack),
+          headline4: TextStyle(fontSize: 24, fontWeight: FontWeight.w300, color: colorBlack),
           headline5: TextStyle(fontSize: 21, fontWeight: FontWeight.bold, color: colorBlack),
           headline6: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: colorBlack),
           bodyText2: TextStyle(fontSize: 16),
@@ -56,47 +58,12 @@ class MyApp extends StatelessWidget {
 
         visualDensity: VisualDensity.standard, 
       ),
-      home: SafeArea(child: MyHomePage(title: 'ISATI Integration')),
-    );
-  }
-}
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key? key, required this.title}) : super(key: key);
-  final String title;
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            SelectableText(
-              'You have pushed the button this many times:',
-            ),
-            SelectableText(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
+      home: Builder(
+        builder: (context) {
+          ScreenUtils.instance.setValues(context);
+
+          return SafeArea(child: RegisterPage());
+        }
       ),
     );
   }
