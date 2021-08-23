@@ -4,7 +4,7 @@ import 'package:isati_integration/models/user.dart';
 import 'package:isati_integration/services/authentication_service.dart';
 import 'package:isati_integration/src/pages/login_page/widgets/login_form.dart';
 import 'package:isati_integration/src/shared/widgets/general/is_status_message.dart';
-import 'package:isati_integration/src/shared/widgets/is_button.dart';
+import 'package:isati_integration/src/shared/widgets/general/is_button.dart';
 import 'package:isati_integration/utils/screen_utils.dart';
 
 class LoginPage extends StatefulWidget {

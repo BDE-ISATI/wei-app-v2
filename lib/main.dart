@@ -2,7 +2,9 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:isati_integration/models/user.dart';
 import 'package:isati_integration/src/pages/main_page/main_page.dart';
+import 'package:isati_integration/src/pages/player/player_main_page/player_main_page.dart';
 import 'package:isati_integration/src/pages/register_page/register_page.dart';
 import 'package:isati_integration/src/providers/user_store.dart';
 import 'package:isati_integration/src/shared/splash_screen.dart';
@@ -70,7 +72,7 @@ class MyApp extends StatelessWidget {
               color: colorScaffolddWhite,
               elevation: 0,
               iconTheme: IconThemeData(color: colorBlack),
-              titleTextStyle: TextStyle(color: colorBlack, fontSize: 40)
+              titleTextStyle: TextStyle(color: colorBlack, fontSize: 24)
             ),
 
             dividerTheme: const DividerThemeData(
@@ -83,14 +85,25 @@ class MyApp extends StatelessWidget {
           home: FutureBuilder(
             future: Provider.of<UserStore>(context).loggedUser,
             builder: (context, snapshot) {
-              ScreenUtils.instance.setValues(context);
-
               if (snapshot.connectionState == ConnectionState.done) {
+                ScreenUtils.instance.setValues(context);
+
+                if (snapshot.hasError) {
+                  return Center(child: Text("Erreur lors du chargement de l'application : ${snapshot.error.toString()}"),);
+                }
+
                 if (!snapshot.hasData) {
                   return SafeArea(child: RegisterPage());
                 }
 
-                return SafeArea(child: MainPage());
+                final User loggedUser = snapshot.data as User;
+
+                if (loggedUser.role == UserRoles.player) {
+                  return SafeArea(child: PlayerMainPage());
+                }
+                else {
+                  Provider.of<UserStore>(context, listen: false).logout();
+                }
               }
 
               return SplashScreen();
