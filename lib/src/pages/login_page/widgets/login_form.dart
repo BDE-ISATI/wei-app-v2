@@ -43,7 +43,7 @@ class LoginForm extends StatelessWidget {
             obscureText: true,
             validator: (value) {
               if (value.isEmpty) {
-                return "Vous devez rentrer une adresse";
+                return "Vous devez rentrer un mot de passe";
               }
 
               return null;
