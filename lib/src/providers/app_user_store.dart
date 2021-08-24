@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:isati_integration/models/user.dart';
 import 'package:isati_integration/services/authentication_service.dart';
 
-class UserStore with ChangeNotifier {
+class AppUserStore with ChangeNotifier {
   User? _user;
 
   Future<User?> get loggedUser async {

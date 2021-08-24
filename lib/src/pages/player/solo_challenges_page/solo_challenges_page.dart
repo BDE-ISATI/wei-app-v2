@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:isati_integration/models/solo_challenge.dart';
+import 'package:isati_integration/src/providers/app_user_store.dart';
 import 'package:isati_integration/src/providers/solo_challenge_store.dart';
 import 'package:isati_integration/src/providers/solo_challenges_store.dart';
-import 'package:isati_integration/src/providers/user_store.dart';
 import 'package:isati_integration/src/shared/widgets/general/is_status_message.dart';
 import 'package:isati_integration/src/shared/widgets/solo_challenge_card.dart';
 import 'package:isati_integration/utils/screen_utils.dart';
@@ -13,13 +13,13 @@ class SoloChallengesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer2<SoloChallengesStore, UserStore>(
-      builder: (context, soloChallengesStore, userStore, child) {
+    return Consumer2<SoloChallengesStore, AppUserStore>(
+      builder: (context, soloChallengesStore, appUserStore, child) {
         return Scaffold(
           body: Padding(
             padding: ScreenUtils.instance.defaultPadding,
             child: FutureBuilder(
-              future: soloChallengesStore.getChallenges(userStore.authenticationHeader),
+              future: soloChallengesStore.getChallenges(appUserStore.authenticationHeader),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.done) {
                   if (snapshot.hasError) {

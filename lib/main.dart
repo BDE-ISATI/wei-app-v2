@@ -3,10 +3,13 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:isati_integration/models/user.dart';
+import 'package:isati_integration/src/pages/administration/admin_main_page/admin_main_page.dart';
 import 'package:isati_integration/src/pages/player/player_main_page/player_main_page.dart';
 import 'package:isati_integration/src/pages/register_page/register_page.dart';
+import 'package:isati_integration/src/providers/app_user_store.dart';
 import 'package:isati_integration/src/providers/solo_challenges_store.dart';
-import 'package:isati_integration/src/providers/user_store.dart';
+import 'package:isati_integration/src/providers/teams_store.dart';
+import 'package:isati_integration/src/providers/users_store.dart';
 import 'package:isati_integration/src/shared/splash_screen.dart';
 import 'package:isati_integration/utils/colors.dart';
 import 'package:isati_integration/utils/screen_utils.dart';
@@ -30,7 +33,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => UserStore()),
+        ChangeNotifierProvider(create: (context) => AppUserStore()),
+        ChangeNotifierProvider(create: (context) => UsersStore()),
+        ChangeNotifierProvider(create: (context) => TeamsStore()),
         ChangeNotifierProvider(create: (context) => SoloChallengesStore())
       ],
       builder: (context, child) {
@@ -84,7 +89,7 @@ class MyApp extends StatelessWidget {
             visualDensity: VisualDensity.standard, 
           ),
           home: FutureBuilder(
-            future: Provider.of<UserStore>(context).loggedUser,
+            future: Provider.of<AppUserStore>(context).loggedUser,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 ScreenUtils.instance.setValues(context);
@@ -99,24 +104,48 @@ class MyApp extends StatelessWidget {
 
                 final User loggedUser = snapshot.data as User;
 
-                colorPrimary = Colors.purple;
+                if (loggedUser.role == UserRoles.player) {
+                  colorPrimary = Colors.purple;
+                }
 
                 // We return a future builder to make sure the 
                 // user sees splash screen with his team color
-                return FutureBuilder(
-                  future: Future<void>.delayed(const Duration(seconds: 2)),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.done) {
-                      if (loggedUser.role == UserRoles.player) {
-                        return SafeArea(child: PlayerMainPage());
+                return Theme(
+                  data: Theme.of(context).copyWith(
+                    colorScheme:  ColorScheme(
+                    brightness: Brightness.light,
+                    primary: colorPrimary,
+                    primaryVariant: colorPrimaryVariant,
+                    onPrimary: colorWhite,
+                    secondary: colorSecondary,
+                    secondaryVariant: colorSecondaryVariant,
+                    onSecondary: colorWhite,
+                    background: colorScaffolddWhite,
+                    onBackground: colorBlack,
+                    error: colorError,
+                    onError: colorWhite,
+                    surface: colorScaffolddWhite,
+                    onSurface: colorBlack
+                  ),
+                  ),
+                  child: FutureBuilder(
+                    future: Future<void>.delayed(const Duration(seconds: 2)),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.done) {
+                        if (loggedUser.role == UserRoles.player) {
+                          return SafeArea(child: PlayerMainPage());
+                        }
+                        else if (loggedUser.role == UserRoles.admin) {
+                          return SafeArea(child: AdminMainPage());
+                        }
+                        else {
+                          Provider.of<AppUserStore>(context, listen: false).logout();
+                        }
                       }
-                      else {
-                        Provider.of<UserStore>(context, listen: false).logout();
-                      }
-                    }
-
-                    return SplashScreen();
-                  },
+                
+                      return SplashScreen();
+                    },
+                  ),
                 );
               }
 

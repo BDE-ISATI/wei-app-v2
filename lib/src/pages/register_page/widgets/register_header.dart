@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:isati_integration/models/user.dart';
 import 'package:isati_integration/src/pages/login_page/login_page.dart';
-import 'package:isati_integration/src/providers/user_store.dart';
+import 'package:isati_integration/src/providers/app_user_store.dart';
 import 'package:isati_integration/src/shared/widgets/general/is_button.dart';
 import 'package:provider/provider.dart';
 
@@ -34,7 +34,7 @@ class RegisterHeader extends StatelessWidget {
     );
 
     if (loggedUser != null) {
-      Provider.of<UserStore>(context, listen: false).loginUser(loggedUser);
+      Provider.of<AppUserStore>(context, listen: false).loginUser(loggedUser);
     }
   }
 }

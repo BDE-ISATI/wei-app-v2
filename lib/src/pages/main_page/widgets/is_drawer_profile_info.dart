@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:isati_integration/models/user.dart';
-import 'package:isati_integration/src/providers/user_store.dart';
+import 'package:isati_integration/src/providers/app_user_store.dart';
 import 'package:isati_integration/src/shared/widgets/general/is_icon_button.dart';
 import 'package:isati_integration/utils/colors.dart';
 import 'package:provider/provider.dart';
@@ -15,8 +15,8 @@ class IsDrawerProfileInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<UserStore>(
-      builder: (context, userStore, child) {
+    return Consumer<AppUserStore>(
+      builder: (context, appUserStore, child) {
         return Container(
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
           decoration: BoxDecoration(
@@ -44,7 +44,7 @@ class IsDrawerProfileInfo extends StatelessWidget {
               if (!isMinimified) ...{
                 const SizedBox(width: 15,),
                 Expanded(
-                  child: _buildDescription(context, userStore),
+                  child: _buildDescription(context, appUserStore),
                 ),
                 // ignore: equal_elements_in_set
                 const SizedBox(width: 15,),
@@ -52,7 +52,7 @@ class IsDrawerProfileInfo extends StatelessWidget {
                   backgroundColor: Colors.white,
                   iconSize: 24,
                   icon: Icons.logout,
-                  onPressed: () => _logout(userStore),
+                  onPressed: () => _logout(appUserStore),
                 )
               }
             ],
@@ -62,19 +62,19 @@ class IsDrawerProfileInfo extends StatelessWidget {
     );
   }
 
-  Widget _buildDescription(BuildContext context, UserStore userStore) {
+  Widget _buildDescription(BuildContext context, AppUserStore appUserStore) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Text(userStore.user!.fullName, style: Theme.of(context).textTheme.headline6),
+        Text(appUserStore.user!.fullName, style: Theme.of(context).textTheme.headline6),
         const SizedBox(height: 2,),
-        Text(UserRoles.detailled[userStore.user!.role] ?? "Inconnue", style: const TextStyle(fontSize: 12, color: Color(0xff8f9bb3)),)
+        Text(UserRoles.detailled[appUserStore.user!.role] ?? "Inconnue", style: const TextStyle(fontSize: 12, color: Color(0xff8f9bb3)),)
       ],
     );
   }
 
-  Future _logout(UserStore userStore) async {
-    await userStore.logout();
+  Future _logout(AppUserStore appUserStore) async {
+    await appUserStore.logout();
   }
 }

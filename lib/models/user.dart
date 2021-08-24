@@ -38,7 +38,7 @@ class User {
     id = map['id'] as String,
     firstName = map['firstName'] as String,
     lastName = map['lastName'] as String,
-    email = map['email'] as String,
+    email = map['email'] as String? ?? "unknown",
 
     role = map['role'] as String,
     token = map['token'] as String?;

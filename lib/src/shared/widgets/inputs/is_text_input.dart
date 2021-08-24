@@ -66,37 +66,40 @@ class _IsTextInput extends State<IsTextInput> {
         const SizedBox(height: 10.0,),
         Theme(
           data: ThemeData(
-            primaryColor: colorSecondary
+            primaryColor: colorSecondary,
           ),
-          child: TextFormField(
-            readOnly: widget.readOnly,
-              key: widget.formKey,
-              obscureText: _obscureText,
-              controller: widget.controller,
-              keyboardType: widget.inputType,
-              maxLines: widget.maxLines,
-              decoration: InputDecoration(
-                hintText: widget.hintText,
-                enabledBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(color: Colors.black12,),
-                  borderRadius: BorderRadius.circular(6.0),
+          child: Container(
+            color: colorScaffolddWhite,
+            child: TextFormField(
+              readOnly: widget.readOnly,
+                key: widget.formKey,
+                obscureText: _obscureText,
+                controller: widget.controller,
+                keyboardType: widget.inputType,
+                maxLines: widget.maxLines,
+                decoration: InputDecoration(
+                  hintText: widget.hintText,
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(color: Colors.black12,),
+                    borderRadius: BorderRadius.circular(6.0),
+                  ),
+                  border: OutlineInputBorder(
+                    borderSide: const BorderSide(color: Colors.black12,),
+                    borderRadius: BorderRadius.circular(6.0),
+                  ),
+                  suffixIcon: widget.suffixIcon != null ? Icon(widget.suffixIcon) : !widget.obscureText ? null : InkWell(
+                    onTap: _textVisibilityUpdated,
+                    child: Icon(_obscureText ? Icons.visibility : Icons.visibility_off),
+                  )
                 ),
-                border: OutlineInputBorder(
-                  borderSide: const BorderSide(color: Colors.black12,),
-                  borderRadius: BorderRadius.circular(6.0),
-                ),
-                suffixIcon: widget.suffixIcon != null ? Icon(widget.suffixIcon) : !widget.obscureText ? null : InkWell(
-                  onTap: _textVisibilityUpdated,
-                  child: Icon(_obscureText ? Icons.visibility : Icons.visibility_off),
-                )
-              ),
-              validator: widget.validator == null ? null : (value) => widget.validator!(value ?? ""),
-              onSaved: widget.onSaved != null ? (value) => widget.onSaved!(value ?? "") : null,
-              onChanged: (value) {
-                if (widget.onChanged != null) {
-                  widget.onChanged!(value);
+                validator: widget.validator == null ? null : (value) => widget.validator!(value ?? ""),
+                onSaved: widget.onSaved != null ? (value) => widget.onSaved!(value ?? "") : null,
+                onChanged: (value) {
+                  if (widget.onChanged != null) {
+                    widget.onChanged!(value);
+                  }
                 }
-              }
+            ),
           ),
         ),
       ],
