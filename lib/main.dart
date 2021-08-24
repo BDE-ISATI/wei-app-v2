@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
           title: 'Flutter Demo',
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
-            colorScheme: const ColorScheme(
+            colorScheme:  ColorScheme(
               brightness: Brightness.light,
               primary: colorPrimary,
               primaryVariant: colorPrimaryVariant,
@@ -99,12 +99,25 @@ class MyApp extends StatelessWidget {
 
                 final User loggedUser = snapshot.data as User;
 
-                if (loggedUser.role == UserRoles.player) {
-                  return SafeArea(child: PlayerMainPage());
-                }
-                else {
-                  Provider.of<UserStore>(context, listen: false).logout();
-                }
+                colorPrimary = Colors.purple;
+
+                // We return a future builder to make sure the 
+                // user sees splash screen with his team color
+                return FutureBuilder(
+                  future: Future<void>.delayed(const Duration(seconds: 2)),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      if (loggedUser.role == UserRoles.player) {
+                        return SafeArea(child: PlayerMainPage());
+                      }
+                      else {
+                        Provider.of<UserStore>(context, listen: false).logout();
+                      }
+                    }
+
+                    return SplashScreen();
+                  },
+                );
               }
 
               return SplashScreen();
