@@ -22,7 +22,7 @@ class IsPageItem extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 20),
       decoration: BoxDecoration(
-        color: isActive ? const Color(0xfffceff0) : colorScaffolddWhite,
+        color: isActive ? brightenColor(colorPrimary, percent: 85) : colorScaffolddWhite,
         border: !isActive ? null : Border(
           left: BorderSide(width: 4, color: colorPrimary)
         )
