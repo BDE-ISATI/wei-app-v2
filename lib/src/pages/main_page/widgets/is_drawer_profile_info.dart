@@ -69,7 +69,10 @@ class IsDrawerProfileInfo extends StatelessWidget {
       children: [
         Text(appUserStore.user!.fullName, style: Theme.of(context).textTheme.headline6),
         const SizedBox(height: 2,),
-        Text(UserRoles.detailled[appUserStore.user!.role] ?? "Inconnue", style: const TextStyle(fontSize: 12, color: Color(0xff8f9bb3)),)
+        if (appUserStore.user!.role == UserRoles.player) 
+          Text(appUserStore.user!.team!.name, style: const TextStyle(fontSize: 12, color: Color(0xff8f9bb3)),)
+        else
+          Text(UserRoles.detailled[appUserStore.user!.role] ?? "Inconnue", style: const TextStyle(fontSize: 12, color: Color(0xff8f9bb3)),)
       ],
     );
   }
