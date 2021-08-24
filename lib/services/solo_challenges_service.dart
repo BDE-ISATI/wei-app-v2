@@ -9,7 +9,7 @@ import 'package:isati_integration/utils/constants.dart';
 class SoloChallengesService {
   SoloChallengesService._privateConstructor();
 
-  final String serviceBaseUrl = "$kApiBaseUrl/solochallenges";
+  final String serviceBaseUrl = "$kApiBaseUrl/challenges/solo";
 
   static final SoloChallengesService instance = SoloChallengesService._privateConstructor();
 
