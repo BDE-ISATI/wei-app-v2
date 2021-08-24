@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:isati_integration/models/user.dart';
-import 'package:isati_integration/src/pages/main_page/main_page.dart';
 import 'package:isati_integration/src/pages/player/player_main_page/player_main_page.dart';
 import 'package:isati_integration/src/pages/register_page/register_page.dart';
+import 'package:isati_integration/src/providers/solo_challenges_store.dart';
 import 'package:isati_integration/src/providers/user_store.dart';
 import 'package:isati_integration/src/shared/splash_screen.dart';
 import 'package:isati_integration/utils/colors.dart';
@@ -31,6 +31,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => UserStore()),
+        ChangeNotifierProvider(create: (context) => SoloChallengesStore())
       ],
       builder: (context, child) {
         return MaterialApp(
@@ -53,7 +54,7 @@ class MyApp extends StatelessWidget {
               onSurface: colorBlack
             ),
 
-            scaffoldBackgroundColor: colorScaffolddWhite,
+            scaffoldBackgroundColor: colorScaffoldGrey,
             dividerColor: const Color(0xffefefef),
 
             textTheme: const TextTheme(
