@@ -3,11 +3,20 @@ import 'package:isati_integration/models/page_item.dart';
 import 'package:isati_integration/src/pages/main_page/main_page.dart';
 import 'package:isati_integration/src/pages/player/solo_challenges_page/solo_challenges_page.dart';
 import 'package:isati_integration/src/pages/player/team_challenges_page/team_challenges_page.dart';
+import 'package:isati_integration/utils/app_manager.dart';
 
 class PlayerMainPage extends StatelessWidget {
-  final List<Widget> pages = const [
-    SoloChallengesPage(),
-    TeamChallengesPage(),
+  final List<Widget> pages = [
+    ClipRect(
+      child: Navigator(
+        key: AppManager.instance.playerSoloChallengesKey,
+        onGenerateRoute: (route) => MaterialPageRoute<dynamic>(
+          settings: route,
+          builder: (context) => const SoloChallengesPage()
+        ),
+      ),
+    ),
+    const TeamChallengesPage(),
   ];
 
   final List<PageItem> pageItems = const [

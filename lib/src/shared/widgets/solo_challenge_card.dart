@@ -1,10 +1,10 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:isati_integration/src/pages/player/solo_challenges_page/solo_challenge_details_page/solo_challenge_details_page.dart';
 import 'package:isati_integration/src/providers/solo_challenge_store.dart';
 import 'package:isati_integration/src/shared/widgets/general/is_button.dart';
 import 'package:isati_integration/src/shared/widgets/general/is_card.dart';
-import 'package:isati_integration/utils/colors.dart';
 import 'package:provider/provider.dart';
 
 class SoloChallengeCard extends StatelessWidget {
@@ -57,7 +57,7 @@ class SoloChallengeCard extends StatelessWidget {
                     const SizedBox(height: 8,),
                     IsButton(
                       text: "Détails",
-                      onPressed: () {},
+                      onPressed: () => _onDetailsPressed(context, soloChallengeStore),
                     ),
                   ],
                 ),
@@ -66,6 +66,17 @@ class SoloChallengeCard extends StatelessWidget {
           ),
         );
       }
+    );
+  }
+
+  Future _onDetailsPressed(BuildContext context, SoloChallengeStore soloChallengeStore) async {
+    await Navigator.of(context).push<void>(
+      MaterialPageRoute(
+        builder: (context) => ChangeNotifierProvider.value(
+          value: soloChallengeStore,
+          child: SoloChallengeDetailsPage(),
+        )
+      )
     );
   }
 }

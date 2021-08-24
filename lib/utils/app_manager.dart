@@ -7,10 +7,18 @@ class AppManager {
 
   final GlobalKey<NavigatorState> appNavigatorKey = GlobalKey<NavigatorState>();
 
+  // Player keys
+  final GlobalKey<NavigatorState> playerSoloChallengesKey = GlobalKey<NavigatorState>();
+
   // Because we are calling this from the main widget we have to check
   // nested navigators status.
   Future<bool?> showCloseAppConfirmation(BuildContext context) {
     // Check current context navigator Main App Navigator
+    if (playerSoloChallengesKey.currentState != null && playerSoloChallengesKey.currentState!.canPop()) {
+      playerSoloChallengesKey.currentState!.pop();
+      return Future.value(false);
+    }
+
     if (appNavigatorKey.currentState!.canPop()) {
       appNavigatorKey.currentState!.pop();
       return Future.value(false);
