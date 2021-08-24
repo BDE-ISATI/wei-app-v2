@@ -3,7 +3,9 @@ import 'dart:io';
 
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
+import 'package:isati_integration/models/team.dart';
 import 'package:isati_integration/models/user.dart';
+import 'package:isati_integration/services/teams_service.dart';
 import 'package:isati_integration/utils/constants.dart';
 
 class UsersService {
@@ -30,6 +32,28 @@ class UsersService {
       }
 
       return teams;
+    }
+
+    throw PlatformException(code: response.statusCode.toString(), message: response.body);
+  }
+
+  Future<User> getUser(String id, {required String authorization}) async {
+    final http.Response response = await http.get(
+      Uri.parse("$serviceBaseUrl/$id"),
+      headers: <String, String>{
+        HttpHeaders.authorizationHeader: authorization
+      }
+    );
+
+    if (response.statusCode == 200) {
+      final map = jsonDecode(response.body) as Map<String, dynamic>;
+      Team? userTeam;      
+
+      if ((map['role'] as String) == UserRoles.player) {
+        userTeam = await TeamsService.instance.getTeam(map["teamId"] as String, authorization: authorization);
+      }
+
+      return User.fromMap(map, team: userTeam);
     }
 
     throw PlatformException(code: response.statusCode.toString(), message: response.body);

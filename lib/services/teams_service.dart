@@ -35,6 +35,21 @@ class TeamsService {
     throw PlatformException(code: response.statusCode.toString(), message: response.body);
   }
 
+  Future<Team> getTeam(String id, {required String authorization}) async {
+    final http.Response response = await http.get(
+      Uri.parse("$serviceBaseUrl/$id"),
+      headers: <String, String>{
+        HttpHeaders.authorizationHeader: authorization,
+      }
+    );
+
+    if (response.statusCode == 200) {
+      return Team.fromMap(jsonDecode(response.body) as Map<String, dynamic>);
+    }
+
+    throw PlatformException(code: response.statusCode.toString(), message: response.body);
+  }
+
   Future<String> createTeam(Team toCreate, {required String authorization}) async {
     final http.Response response = await http.post(
       Uri.parse(serviceBaseUrl),

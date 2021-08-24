@@ -95,6 +95,7 @@ class MyApp extends StatelessWidget {
                 ScreenUtils.instance.setValues(context);
 
                 if (snapshot.hasError) {
+                  Provider.of<AppUserStore>(context, listen: false).logout();
                   return Center(child: Text("Erreur lors du chargement de l'application : ${snapshot.error.toString()}"),);
                 }
 
@@ -105,7 +106,7 @@ class MyApp extends StatelessWidget {
                 final User loggedUser = snapshot.data as User;
 
                 if (loggedUser.role == UserRoles.player) {
-                  colorPrimary = Colors.purple;
+                  colorPrimary = loggedUser.team!.teamColor.toColor();
                 }
 
                 // We return a future builder to make sure the 

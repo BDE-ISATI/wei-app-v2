@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:isati_integration/models/user.dart';
+import 'package:isati_integration/services/users_service.dart';
 import 'package:isati_integration/utils/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -29,11 +30,17 @@ class AuthenticationService {
     );
 
     if (response.statusCode == 200) {
-      final User loggedUser = User.fromMap(jsonDecode(response.body) as Map<String, dynamic>);
+      final map = jsonDecode(response.body) as Map<String, dynamic>;
+      final User user = await UsersService.instance.getUser(
+        map["id"] as String,
+        authorization: "Bearer ${map['token'] as String}"
+      );
 
-      await _saveUserToSettings(loggedUser);
+      user.token = map['token'] as String;
 
-      return loggedUser;
+      await _saveUserToSettings(user);
+
+      return user;
     }
 
     throw PlatformException(code: response.statusCode.toString(), message: response.body);
@@ -46,12 +53,6 @@ class AuthenticationService {
     final SharedPreferences preferences = await SharedPreferences.getInstance();
 
     await preferences.remove("user_id");
-
-    await preferences.remove("user_firstName");
-    await preferences.remove("user_lastName");
-    await preferences.remove("user_email");
-
-    await preferences.remove("user_role");
     await preferences.remove("user_token");
   }
 
@@ -60,12 +61,6 @@ class AuthenticationService {
     final SharedPreferences preferences = await SharedPreferences.getInstance();
 
     await preferences.setString("user_id", userToSave.id!);
-
-    await preferences.setString("user_firstName", userToSave.firstName);
-    await preferences.setString("user_lastName", userToSave.lastName);
-    await preferences.setString("user_email", userToSave.email);
-
-    await preferences.setString("user_role", userToSave.role);
     await preferences.setString("user_token", userToSave.token!);
   }
 
@@ -75,15 +70,11 @@ class AuthenticationService {
     final String? id = preferences.getString("user_id");
     
     if (id == null) { return null; }
-    
-    final User user = User(
-      id,
-      firstName: preferences.getString("user_firstName") ?? "",
-      lastName: preferences.getString("user_lastName") ?? "",
-      email: preferences.getString("user_email") ?? "",
-      role: preferences.getString("user_role") ?? "",
-      token: preferences.getString("user_token") ?? ""
-    );
+
+    final token = preferences.getString("user_token") ?? "";
+
+    final User user = await UsersService.instance.getUser(id, authorization: "Bearer $token");
+    user.token = token;
 
     return user;
   }

@@ -1,4 +1,6 @@
 
+import 'package:isati_integration/models/team.dart';
+
 mixin UserRoles {
   static const String admin = "Admin";
   static const String captain = "Captain";
@@ -13,6 +15,8 @@ mixin UserRoles {
 
 class User {
   final String? id;
+
+  Team? team;
 
   String firstName;
   String lastName;
@@ -34,7 +38,9 @@ class User {
     this.token
   });
 
-  User.fromMap(Map<String, dynamic> map) : 
+  User.fromMap(Map<String, dynamic> map, {
+    this.team
+  }) : 
     id = map['id'] as String,
     firstName = map['firstName'] as String,
     lastName = map['lastName'] as String,
