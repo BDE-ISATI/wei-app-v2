@@ -1,5 +1,10 @@
+import 'package:isati_integration/models/is_image.dart';
+import 'package:isati_integration/services/solo_challenges_service.dart';
+
 class SoloChallenge {
   String? id;
+
+  late IsImage challengeImage;
 
   String title;
   String description;
@@ -18,7 +23,9 @@ class SoloChallenge {
     required this.numberOfRepetitions,
     required this.startingDate,
     required this.endingDate,
-  });
+  }) {
+    challengeImage = IsImage("");
+  }
 
   SoloChallenge.fromMap(Map<String, dynamic> map) : 
     id = map['id'] as String,
@@ -27,7 +34,9 @@ class SoloChallenge {
     value = map['value'] as int,
     numberOfRepetitions = map['numberOfRepetitions'] as int,
     startingDate = DateTime.parse(map['startingDate'] as String),
-    endingDate = DateTime.parse(map['endingDate'] as String);
+    endingDate = DateTime.parse(map['endingDate'] as String) {
+      challengeImage = IsImage("${SoloChallengesService.instance.serviceBaseUrl}/$id/image");
+    }
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{

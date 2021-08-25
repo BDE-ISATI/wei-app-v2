@@ -5,6 +5,7 @@ import 'package:isati_integration/src/pages/player/solo_challenges_page/solo_cha
 import 'package:isati_integration/src/providers/solo_challenge_store.dart';
 import 'package:isati_integration/src/shared/widgets/general/is_app_bar.dart';
 import 'package:isati_integration/src/shared/widgets/general/is_button.dart';
+import 'package:isati_integration/src/shared/widgets/general/is_image_widget.dart';
 import 'package:isati_integration/utils/screen_utils.dart';
 import 'package:provider/provider.dart';
 
@@ -132,7 +133,7 @@ class SoloChallengeDetailsPage extends StatelessWidget {
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(8.0),
-        child: Image.asset("assets/images/background.jpg", fit: BoxFit.cover,)
+        child: IsImageWidget(source: challenge.challengeImage,)
       )
     );
   }

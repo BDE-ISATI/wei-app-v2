@@ -1,9 +1,11 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:isati_integration/models/is_image.dart';
 import 'package:isati_integration/src/providers/solo_challenge_store.dart';
 import 'package:isati_integration/src/shared/widgets/general/is_button.dart';
 import 'package:isati_integration/src/shared/widgets/general/is_card.dart';
+import 'package:isati_integration/src/shared/widgets/general/is_image_widget.dart';
 import 'package:isati_integration/utils/colors.dart';
 import 'package:provider/provider.dart';
 
@@ -57,7 +59,11 @@ class SoloChallengeCard extends StatelessWidget {
                   topLeft: Radius.circular(8),
                   topRight: Radius.circular(8),
                 ),
-                child: Image.asset("assets/images/background.jpg", height: 180, fit: BoxFit.cover,),
+                child: IsImageWidget(
+                  source: soloChallengeStore.challenge.challengeImage,
+                  height: 180,
+                  fit: BoxFit.cover,
+                ),
               ),
               // Container(
               //   color: colorPrimary,

@@ -8,6 +8,7 @@ import 'package:isati_integration/src/shared/widgets/general/is_app_bar.dart';
 import 'package:isati_integration/src/shared/widgets/general/is_button.dart';
 import 'package:isati_integration/src/shared/widgets/general/is_status_message.dart';
 import 'package:isati_integration/src/shared/widgets/inputs/is_date_form_field.dart';
+import 'package:isati_integration/src/shared/widgets/inputs/is_image_picker.dart';
 import 'package:isati_integration/src/shared/widgets/inputs/is_text_input.dart';
 import 'package:isati_integration/utils/screen_utils.dart';
 import 'package:provider/provider.dart';
@@ -27,6 +28,8 @@ class _SoloChallengeEditPageState extends State<SoloChallengeEditPage> {
   
   DateTime? _startDate = DateTime.now();
   DateTime? _endDate = DateTime.now();
+
+  String _newImageString = "";
 
   bool _initialized = false;
   bool _isLoading = false;
@@ -74,6 +77,19 @@ class _SoloChallengeEditPageState extends State<SoloChallengeEditPage> {
                         ),
                         const SizedBox(height: 20,)
                       },
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(8.0),
+                        child: Container(
+                          height: 200,
+                          child: IsImagePicker(
+                            initialImage: soloChallengeStore.challenge.challengeImage.image,
+                            onUpdated: (value) {
+                              _newImageString = value;
+                            },
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 20,),
                       IsTextInput(
                         controller: _titleTextController, 
                         validator: (value) {
@@ -86,6 +102,7 @@ class _SoloChallengeEditPageState extends State<SoloChallengeEditPage> {
                         labelText: "Nom du défis" ,
                         hintText: "La poulette russe",
                       ),
+                      // ignore: equal_elements_in_set
                       const SizedBox(height: 20,),
                        IsTextInput(
                         controller: _descriptionTextController, 
@@ -204,7 +221,7 @@ class _SoloChallengeEditPageState extends State<SoloChallengeEditPage> {
       final appUserStore = Provider.of<AppUserStore>(context, listen: false);
 
       if (soloChallengeStore.challenge.id == null) {
-        final String id = await SoloChallengesService.instance.createChallenge(soloChallengeStore.challenge, authorization: appUserStore.authenticationHeader); 
+        final String id = await SoloChallengesService.instance.createChallenge(soloChallengeStore.challenge, _newImageString, authorization: appUserStore.authenticationHeader); 
 
         Navigator.of(context).pop(
           SoloChallenge(id, 
@@ -218,7 +235,7 @@ class _SoloChallengeEditPageState extends State<SoloChallengeEditPage> {
         );
       }
       else {
-        await SoloChallengesService.instance.updateChallenge(soloChallengeStore.challenge, authorization: appUserStore.authenticationHeader);
+        await SoloChallengesService.instance.updateChallenge(soloChallengeStore.challenge, _newImageString, authorization: appUserStore.authenticationHeader);
 
         Navigator.of(context).pop();
       }

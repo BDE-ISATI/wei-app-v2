@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:isati_integration/models/solo_challenge.dart';
 
@@ -39,6 +41,12 @@ class SoloChallengeStore with ChangeNotifier {
   DateTime get endingDate => challenge.endingDate;
   set endingDate(DateTime value) {
     challenge.endingDate = value;
+    notifyListeners();
+  }
+
+  void updateImage(String imageString) {
+    challenge.challengeImage.image = MemoryImage(base64Decode(imageString));
+
     notifyListeners();
   }
 
