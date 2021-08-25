@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:isati_integration/models/solo_challenge.dart';
+import 'package:isati_integration/src/pages/player/solo_challenges_page/solo_challenge_details_page/submit_solo_challenge_page/submit_solo_challenge_page.dart';
 import 'package:isati_integration/src/providers/solo_challenge_store.dart';
 import 'package:isati_integration/src/shared/widgets/general/is_app_bar.dart';
 import 'package:isati_integration/src/shared/widgets/general/is_button.dart';
@@ -56,7 +57,7 @@ class SoloChallengeDetailsPage extends StatelessWidget {
           child: _buildChallengeInfoWrap(challenge),
         ),
         const SizedBox(height: 20,),
-        IsButton(text: "Envoyer des preuves", onPressed: () {},),
+        IsButton(text: "Envoyer des preuves", onPressed: () => _onSendProofPressed(context),),
       ],
     );
   }
@@ -85,7 +86,7 @@ class SoloChallengeDetailsPage extends StatelessWidget {
                 child: _buildChallengeInfoWrap(challenge), 
               ),
               const SizedBox(height: 20,),
-              IsButton(text: "Envoyer des preuves", onPressed: () {},),
+              IsButton(text: "Envoyer des preuves", onPressed: () => _onSendProofPressed(context),),
             ],
           ),
         )
@@ -136,6 +137,14 @@ class SoloChallengeDetailsPage extends StatelessWidget {
           Flexible(child: Text(text, style: const TextStyle(fontStyle: FontStyle.italic),))
         ],
       ),
+    );
+  }
+
+  Future _onSendProofPressed(BuildContext context) async {
+    await Navigator.of(context).push<void>(
+      MaterialPageRoute(
+        builder: (context) => SubmitSoloChallengePage()
+      )
     );
   }
 }
