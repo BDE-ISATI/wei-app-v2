@@ -36,6 +36,7 @@ class TeamChallenge {
       "title": title,
       "description": description,
       "value": value,
+      "shouldCountMember": shouldCountMembers,
       "numberOfRepetitions": numberOfRepetitions,
       "startingDate": startingDate.toIso8601String(),
       "endingDate": endingDate.toIso8601String(),

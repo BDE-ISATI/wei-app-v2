@@ -4,6 +4,7 @@ import 'package:isati_integration/src/pages/administration/admin_solo_challenges
 import 'package:isati_integration/src/pages/administration/admin_team_challenges_page.dart/admin_team_challenge_page.dart';
 import 'package:isati_integration/src/pages/administration/admin_teams_page/admin_teams_page.dart';
 import 'package:isati_integration/src/pages/main_page/main_page.dart';
+import 'package:isati_integration/src/pages/team_challenges_page/team_challenges_page.dart';
 import 'package:isati_integration/src/pages/waiting_solo_validations_page/waiting_solo_validation_page.dart';
 import 'package:isati_integration/utils/app_manager.dart';
 
@@ -24,6 +25,15 @@ final List<Widget> pages = [
         onGenerateRoute: (route) => MaterialPageRoute<dynamic>(
           settings: route,
           builder: (context) => AdminSoloChallengesPage()
+        ),
+      ),
+    ),
+    ClipRect(
+      child: Navigator(
+        key: AppManager.instance.teamChallengesKey,
+        onGenerateRoute: (route) => MaterialPageRoute<dynamic>(
+          settings: route,
+          builder: (context) => const TeamChallengesPage()
         ),
       ),
     ),
@@ -60,11 +70,16 @@ final List<Widget> pages = [
     ),
     PageItem(
       index: 2,
+      title: "Les défis solo d'équipe",
+      icon: Icons.pool
+    ),
+    PageItem(
+      index: 3,
       title: "Modifier les défis d'équipe",
       icon: Icons.edit
     ),
     PageItem(
-      index: 3,
+      index: 4,
       title: "Les équipes",
       icon: Icons.people
     ),
