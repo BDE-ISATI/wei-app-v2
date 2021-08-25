@@ -12,6 +12,7 @@ class AppManager {
 
   // Admin keys
   final GlobalKey<NavigatorState> adminSoloChallengesKey = GlobalKey<NavigatorState>();
+  final GlobalKey<NavigatorState> adminTeamChallengesKey = GlobalKey<NavigatorState>();
   final GlobalKey<NavigatorState> adminTeamsKey = GlobalKey<NavigatorState>();
 
   // Global keys
@@ -30,6 +31,11 @@ class AppManager {
     // Admin ones
     if (adminSoloChallengesKey.currentState != null && adminSoloChallengesKey.currentState!.canPop()) {
       adminSoloChallengesKey.currentState!.pop();
+      return Future.value(false);
+    }
+
+    if (adminTeamChallengesKey.currentState != null && adminTeamChallengesKey.currentState!.canPop()) {
+      adminTeamChallengesKey.currentState!.pop();
       return Future.value(false);
     }
 
