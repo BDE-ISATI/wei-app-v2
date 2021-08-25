@@ -37,6 +37,21 @@ class SoloValidationsService {
     throw PlatformException(code: response.statusCode.toString(), message: response.body);
   }
 
+  Future<String> getValidationImage(String fileId, {required String authorization}) async {
+    final http.Response response = await http.get(
+      Uri.parse("$serviceBaseUrl/files/$fileId"),
+      headers: <String, String>{
+        HttpHeaders.authorizationHeader: authorization
+      },
+    );
+
+    if (response.statusCode == 200) {
+      return response.body.replaceAll('"', '');
+    }
+
+    throw PlatformException(code: response.statusCode.toString(), message: response.body);
+  }
+
   Future<String> submitValidation(String challengeId, List<String> medias, {required String authorization}) async {
     final http.Response response = await http.post(
       Uri.parse(serviceBaseUrl),
@@ -57,5 +72,33 @@ class SoloValidationsService {
     throw PlatformException(code: response.statusCode.toString(), message: response.body);
   }
 
+  Future acceptValidation(String id, int extraPoints, {required String authorization}) async {
+    final http.Response response = await http.post(
+      Uri.parse("$serviceBaseUrl/$id/validate"),
+      headers: <String, String>{
+        HttpHeaders.authorizationHeader: authorization,
+        HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8",
+      },
+      body: jsonEncode(<String, dynamic>{
+        "extraPoints": extraPoints
+      })
+    );
 
+    if (response.statusCode != 200) {
+      throw PlatformException(code: response.statusCode.toString(), message: response.body);
+    }
+  }
+
+  Future rejectValidation(String id, {required String authorization}) async {
+    final http.Response response = await http.post(
+      Uri.parse("$serviceBaseUrl/$id/reject"),
+      headers: <String, String>{
+        HttpHeaders.authorizationHeader: authorization,
+      },
+    );
+
+    if (response.statusCode != 200) {
+      throw PlatformException(code: response.statusCode.toString(), message: response.body);
+    }
+  }
 }

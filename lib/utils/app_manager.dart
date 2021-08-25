@@ -9,7 +9,12 @@ class AppManager {
 
   // Player keys
   final GlobalKey<NavigatorState> playerSoloChallengesKey = GlobalKey<NavigatorState>();
+
+  // Admin keys
   final GlobalKey<NavigatorState> adminTeamsKey = GlobalKey<NavigatorState>();
+
+  // Global keys
+  final GlobalKey<NavigatorState> soloWaitingValidationsKey = GlobalKey<NavigatorState>();
 
   // Because we are calling this from the main widget we have to check
   // nested navigators status.
@@ -28,6 +33,11 @@ class AppManager {
     }
 
     // Global ones
+    if (soloWaitingValidationsKey.currentState != null && soloWaitingValidationsKey.currentState!.canPop()) {
+      soloWaitingValidationsKey.currentState!.pop();
+      return Future.value(false);
+    }
+
     if (appNavigatorKey.currentState!.canPop()) {
       appNavigatorKey.currentState!.pop();
       return Future.value(false);

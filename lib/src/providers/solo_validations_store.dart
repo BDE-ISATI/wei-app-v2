@@ -18,6 +18,12 @@ class SoloValidationsStore with ChangeNotifier {
     notifyListeners();
   }
 
+  void removeValidation(SoloValidation validation) {
+    _validations!.remove(validation);
+
+    notifyListeners();
+  }
+
   void updateChallenges(SoloChallengesStore challengesStore) {
     for (final validation in validations) {
       if (challengesStore.challenges[validation.challengeId] != null) {
