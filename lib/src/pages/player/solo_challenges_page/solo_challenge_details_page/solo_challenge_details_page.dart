@@ -9,6 +9,13 @@ import 'package:isati_integration/utils/screen_utils.dart';
 import 'package:provider/provider.dart';
 
 class SoloChallengeDetailsPage extends StatelessWidget {
+  const SoloChallengeDetailsPage({
+    Key? key, 
+    this.showButton = true
+  }) : super(key: key);
+
+  final bool showButton;
+
   @override
   Widget build(BuildContext context) {
     return Consumer<SoloChallengeStore>(
@@ -30,8 +37,8 @@ class SoloChallengeDetailsPage extends StatelessWidget {
                     children: [
                       Flexible(
                         child: (constraints.maxWidth < ScreenUtils.instance.breakpointPC) ?
-                          _buildSmallHeader(context, challenge) :
-                          _buildBigHeader(context, challenge)
+                          _buildSmallHeader(context, soloChallengeStore) :
+                          _buildBigHeader(context, soloChallengeStore)
                       ),
                       const SizedBox(height: 20,),
                       Text(challenge.description)
@@ -46,7 +53,9 @@ class SoloChallengeDetailsPage extends StatelessWidget {
     );
   }
 
-  Widget _buildSmallHeader(BuildContext context, SoloChallenge challenge) {
+  Widget _buildSmallHeader(BuildContext context, SoloChallengeStore soloChallengeStore) {
+    final SoloChallenge challenge = soloChallengeStore.challenge;
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -57,12 +66,14 @@ class SoloChallengeDetailsPage extends StatelessWidget {
           child: _buildChallengeInfoWrap(challenge),
         ),
         const SizedBox(height: 20,),
-        IsButton(text: "Envoyer des preuves", onPressed: () => _onSendProofPressed(context),),
+        _buildButton(context, soloChallengeStore)
       ],
     );
   }
 
-  Widget _buildBigHeader(BuildContext context, SoloChallenge challenge) {
+  Widget _buildBigHeader(BuildContext context, SoloChallengeStore soloChallengeStore) {
+    final SoloChallenge challenge = soloChallengeStore.challenge;
+
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -86,12 +97,24 @@ class SoloChallengeDetailsPage extends StatelessWidget {
                 child: _buildChallengeInfoWrap(challenge), 
               ),
               const SizedBox(height: 20,),
-              IsButton(text: "Envoyer des preuves", onPressed: () => _onSendProofPressed(context),),
+              _buildButton(context, soloChallengeStore)
             ],
           ),
         )
       ],
     );
+  }
+
+  Widget _buildButton(BuildContext context, SoloChallengeStore soloChallengeStore) {
+    if (soloChallengeStore.challenge.userWaitsValidation) {
+      return const IsButton(text: "En attente de validation");
+    }
+    else if (!showButton || soloChallengeStore.challenge.numberOfRepetitions <= 0) {
+      return Container();
+    }
+
+    return IsButton(text: "Envoyer des preuves", onPressed: () => _onSendProofPressed(context, soloChallengeStore,));
+    
   }
 
   Widget _buildChallengeImage(SoloChallenge challenge, { double maxHeight = 500 }) {
@@ -140,11 +163,18 @@ class SoloChallengeDetailsPage extends StatelessWidget {
     );
   }
 
-  Future _onSendProofPressed(BuildContext context) async {
-    await Navigator.of(context).push<void>(
+  Future _onSendProofPressed(BuildContext context, SoloChallengeStore soloChallengeStore) async {
+    final bool hasProofBeenSent = await Navigator.of(context).push<bool?>(
       MaterialPageRoute(
-        builder: (context) => SubmitSoloChallengePage()
+        builder: (context) => ChangeNotifierProvider.value(
+          value: soloChallengeStore,
+          builder: (context, child) => SubmitSoloChallengePage(),
+        ),
       )
-    );
+    ) ?? false;
+
+    if (hasProofBeenSent) {
+      soloChallengeStore.setChallengeToWait();
+    }
   }
 }

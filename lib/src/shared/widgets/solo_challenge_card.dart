@@ -5,17 +5,24 @@ import 'package:isati_integration/src/pages/player/solo_challenges_page/solo_cha
 import 'package:isati_integration/src/providers/solo_challenge_store.dart';
 import 'package:isati_integration/src/shared/widgets/general/is_button.dart';
 import 'package:isati_integration/src/shared/widgets/general/is_card.dart';
+import 'package:isati_integration/utils/colors.dart';
 import 'package:provider/provider.dart';
 
 class SoloChallengeCard extends StatelessWidget {
   const SoloChallengeCard({
     Key? key, 
     this.width,
-    this.isCompletedByUser = false,
+    this.showOverlay = false,
+    this.buttonText,
+    this.onButtonPressed,
   }) : super(key: key);
 
   final double? width;
-  final bool isCompletedByUser;
+
+  final bool showOverlay;
+
+  final String? buttonText;
+  final Function()? onButtonPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -24,9 +31,23 @@ class SoloChallengeCard extends StatelessWidget {
         final String challengeTitle = soloChallengeStore.challenge.title;
         final String challengeDescription = soloChallengeStore.challenge.description;
 
+        Color overlayColor = Colors.transparent;
+
+        if (showOverlay && soloChallengeStore.challenge.userWaitsValidation) {
+          overlayColor = colorYellow.withOpacity(0.5);
+        }
+        else if (showOverlay && soloChallengeStore.challenge.numberOfRepetitions <= 0) {
+          overlayColor = Colors.grey[700]!.withOpacity(0.5);
+        }
+
         return IsCard(
           padding: EdgeInsets.zero,
           width: width,
+          foregroundDecoration: BoxDecoration(
+            color: overlayColor,
+            backgroundBlendMode: BlendMode.srcOver,
+            borderRadius: BorderRadius.circular(8.0)
+          ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -55,9 +76,10 @@ class SoloChallengeCard extends StatelessWidget {
                     // The challenge description
                     Text("${challengeDescription.substring(0, min(challengeDescription.length, 100))}..."),
                     const SizedBox(height: 8,),
-                    IsButton(
-                      text: "Détails",
-                      onPressed: () => _onDetailsPressed(context, soloChallengeStore),
+                    if (buttonText != null)
+                      IsButton(
+                        text: buttonText!,
+                        onPressed: onButtonPressed
                     ),
                   ],
                 ),
@@ -66,17 +88,6 @@ class SoloChallengeCard extends StatelessWidget {
           ),
         );
       }
-    );
-  }
-
-  Future _onDetailsPressed(BuildContext context, SoloChallengeStore soloChallengeStore) async {
-    await Navigator.of(context).push<void>(
-      MaterialPageRoute(
-        builder: (context) => ChangeNotifierProvider.value(
-          value: soloChallengeStore,
-          child: SoloChallengeDetailsPage(),
-        )
-      )
     );
   }
 }

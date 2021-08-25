@@ -13,7 +13,7 @@ class SoloChallengesService {
 
   static final SoloChallengesService instance = SoloChallengesService._privateConstructor();
 
-  Future<List<SoloChallenge>> getChallenges(String authorization) async {
+  Future<Map<String, SoloChallenge>> getChallenges(String authorization) async {
     final http.Response response = await http.get(
       Uri.parse(serviceBaseUrl),
       headers: <String, String>{
@@ -23,12 +23,10 @@ class SoloChallengesService {
 
     if (response.statusCode == 200) {
       final List<dynamic> jsonChallenges = jsonDecode(response.body) as List<dynamic>;
-      final List<SoloChallenge> challenges = [];
+      final Map<String, SoloChallenge> challenges = {};
 
       for (final map in jsonChallenges) {
-        challenges.add(
-          SoloChallenge.fromMap(map as Map<String, dynamic>)
-        );
+        challenges[map['id'] as String] =  SoloChallenge.fromMap(map as Map<String, dynamic>);
       }
 
       return challenges;

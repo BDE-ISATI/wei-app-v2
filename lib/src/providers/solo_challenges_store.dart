@@ -3,11 +3,18 @@ import 'package:isati_integration/models/solo_challenge.dart';
 import 'package:isati_integration/services/solo_challenges_service.dart';
 
 class SoloChallengesStore with ChangeNotifier {
-  List<SoloChallenge>? _challenges;
+  Map<String, SoloChallenge>? _challenges;
 
   Future<List<SoloChallenge>> getChallenges(String authorization) async {
-    return _challenges ??= await SoloChallengesService.instance.getChallenges(authorization);
+    _challenges ??= await SoloChallengesService.instance.getChallenges(authorization);
+
+    return _challenges!.values.toList();
   } 
 
-  List<SoloChallenge> get challenges => _challenges!;
+  Map<String, SoloChallenge> get challenges => _challenges!;
+  List<SoloChallenge> get challengesList => _challenges!.values.toList();
+
+  void receivedUpdate() {
+    notifyListeners();
+  }
 }

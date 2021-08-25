@@ -5,6 +5,7 @@ class IsCard extends StatelessWidget {
     Key? key, 
     this.height, 
     this.width, 
+    this.foregroundDecoration,
     this.margin = EdgeInsets.zero,
     this.padding = const EdgeInsets.symmetric(vertical: 15.0, horizontal: 15.0),  
     required this.child,
@@ -15,6 +16,8 @@ class IsCard extends StatelessWidget {
 
   final double? height;
   final double? width;
+
+  final Decoration? foregroundDecoration;
 
   final EdgeInsetsGeometry margin;
   final EdgeInsetsGeometry padding;
@@ -28,6 +31,7 @@ class IsCard extends StatelessWidget {
       width: width,
       margin: margin,
       padding: padding,
+      foregroundDecoration: foregroundDecoration,
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
         border: borderColor != null ? Border.all(

@@ -6,6 +6,7 @@ class SoloChallenge {
 
   int value;
   int numberOfRepetitions;
+  bool userWaitsValidation = false;
 
   DateTime startingDate;
   DateTime endingDate;
