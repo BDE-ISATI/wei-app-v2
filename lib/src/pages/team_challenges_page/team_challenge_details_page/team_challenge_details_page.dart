@@ -85,8 +85,8 @@ class _TeamChallengeDetailsPageState extends State<TeamChallengeDetailsPage> {
                               ),
                             Flexible(
                               child: (constraints.maxWidth < ScreenUtils.instance.breakpointPC) ?
-                                _buildSmallHeader(context, teamChallengeStore, teamsStore) :
-                                _buildBigHeader(context, teamChallengeStore, teamsStore)
+                                _buildSmallHeader(teamChallengeStore, teamsStore) :
+                                _buildBigHeader(teamChallengeStore, teamsStore)
                             ),
                             const SizedBox(height: 20,),
                             Text(challenge.description)
@@ -106,7 +106,7 @@ class _TeamChallengeDetailsPageState extends State<TeamChallengeDetailsPage> {
     );
   }
 
-  Widget _buildSmallHeader(BuildContext context, TeamChallengeStore teamChallengeStore, TeamsStore teamsStore) {
+  Widget _buildSmallHeader(TeamChallengeStore teamChallengeStore, TeamsStore teamsStore) {
     final TeamChallenge challenge = teamChallengeStore.challenge;
 
     return Column(
@@ -119,12 +119,12 @@ class _TeamChallengeDetailsPageState extends State<TeamChallengeDetailsPage> {
           child: _buildChallengeInfoWrap(challenge),
         ),
         const SizedBox(height: 20,),
-        Flexible(child: _buildForm(context, teamChallengeStore, teamsStore))
+        Flexible(child: _buildForm(teamChallengeStore, teamsStore))
       ],
     );
   }
 
-  Widget _buildBigHeader(BuildContext context, TeamChallengeStore teamChallengeStore, TeamsStore teamsStore) {
+  Widget _buildBigHeader(TeamChallengeStore teamChallengeStore, TeamsStore teamsStore) {
     final TeamChallenge challenge = teamChallengeStore.challenge;
 
     return Row(
@@ -150,7 +150,7 @@ class _TeamChallengeDetailsPageState extends State<TeamChallengeDetailsPage> {
                 child: _buildChallengeInfoWrap(challenge), 
               ),
               const SizedBox(height: 20,),
-              Flexible(child: _buildForm(context, teamChallengeStore, teamsStore))
+              Flexible(child: _buildForm(teamChallengeStore, teamsStore))
             ],
           ),
         )
@@ -158,7 +158,7 @@ class _TeamChallengeDetailsPageState extends State<TeamChallengeDetailsPage> {
     );
   }
 
-  Widget _buildForm(BuildContext context, TeamChallengeStore teamChallengeStore, TeamsStore teamsStore) {
+  Widget _buildForm(TeamChallengeStore teamChallengeStore, TeamsStore teamsStore) {
     if (!widget.showButton || teamChallengeStore.challenge.numberOfRepetitions <= 0) {
       return Container();
     }
@@ -228,7 +228,7 @@ class _TeamChallengeDetailsPageState extends State<TeamChallengeDetailsPage> {
             const SizedBox(height: 8.0,),
             IsButton(
               text: "Valider le défis",
-              onPressed: () => _onValidatedPressed(context, teamChallengeStore)
+              onPressed: () => _onValidatedPressed(teamChallengeStore)
             )
           ],
         ),
@@ -284,7 +284,7 @@ class _TeamChallengeDetailsPageState extends State<TeamChallengeDetailsPage> {
     );
   }
 
-  Future _onValidatedPressed(BuildContext context, TeamChallengeStore teamChallengeStore) async {
+  Future _onValidatedPressed(TeamChallengeStore teamChallengeStore) async {
     if (!_formKey.currentState!.validate()) {
       return;
     }

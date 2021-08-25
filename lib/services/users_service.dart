@@ -49,7 +49,7 @@ class UsersService {
       final map = jsonDecode(response.body) as Map<String, dynamic>;
       Team? userTeam;      
 
-      if ((map['role'] as String) == UserRoles.player) {
+      if ((map['teamId'] as String?) != null) {
         userTeam = await TeamsService.instance.getTeam(map["teamId"] as String, authorization: authorization);
       }
 

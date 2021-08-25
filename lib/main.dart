@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:isati_integration/models/user.dart';
 import 'package:isati_integration/src/pages/administration/admin_main_page/admin_main_page.dart';
+import 'package:isati_integration/src/pages/captain/captain_main_page/captain_main_page.dart';
 import 'package:isati_integration/src/pages/player/player_main_page/player_main_page.dart';
 import 'package:isati_integration/src/pages/register_page/register_page.dart';
 import 'package:isati_integration/src/providers/app_user_store.dart';
@@ -111,7 +112,7 @@ class MyApp extends StatelessWidget {
 
                 final User loggedUser = snapshot.data as User;
 
-                if (loggedUser.role == UserRoles.player) {
+                if (loggedUser.team != null) {
                   colorPrimary = loggedUser.team!.teamColor.toColor();
                 }
 
@@ -141,6 +142,9 @@ class MyApp extends StatelessWidget {
                       if (snapshot.connectionState == ConnectionState.done) {
                         if (loggedUser.role == UserRoles.player) {
                           return SafeArea(child: PlayerMainPage());
+                        }
+                        else if (loggedUser.role == UserRoles.captain) {
+                          return SafeArea(child: CaptainMainPage());
                         }
                         else if (loggedUser.role == UserRoles.admin) {
                           return SafeArea(child: AdminMainPage());
