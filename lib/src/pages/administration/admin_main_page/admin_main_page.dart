@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:isati_integration/models/page_item.dart';
+import 'package:isati_integration/src/pages/administration/admin_solo_challenges_page.dart/admin_solo_challenges_page.dart';
 import 'package:isati_integration/src/pages/administration/admin_teams_page/admin_teams_page.dart';
 import 'package:isati_integration/src/pages/main_page/main_page.dart';
 import 'package:isati_integration/src/pages/waiting_solo_validations_page/waiting_solo_validation_page.dart';
@@ -18,6 +19,15 @@ final List<Widget> pages = [
     ),
     ClipRect(
       child: Navigator(
+        key: AppManager.instance.adminSoloChallengesKey,
+        onGenerateRoute: (route) => MaterialPageRoute<dynamic>(
+          settings: route,
+          builder: (context) => AdminSoloChallengesPage()
+        ),
+      ),
+    ),
+    ClipRect(
+      child: Navigator(
         key: AppManager.instance.adminTeamsKey,
         onGenerateRoute: (route) => MaterialPageRoute<dynamic>(
           settings: route,
@@ -30,11 +40,16 @@ final List<Widget> pages = [
   final List<PageItem> pageItems = const [
     PageItem(
       index: 0,
-      title: "Les défis à valider",
+      title: "Les défis solo à valider",
       icon: Icons.pool
     ),
     PageItem(
       index: 1,
+      title: "Modifier les défis solo",
+      icon: Icons.edit
+    ),
+    PageItem(
+      index: 2,
       title: "Les équipes",
       icon: Icons.people
     ),

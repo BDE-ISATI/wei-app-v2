@@ -34,4 +34,37 @@ class SoloChallengesService {
 
     throw PlatformException(code: response.statusCode.toString(), message: response.body);
   }
+
+  Future<String> createChallenge(SoloChallenge toCreate, {required String authorization}) async {
+    final http.Response response = await http.post(
+      Uri.parse(serviceBaseUrl),
+      headers: <String, String>{
+        HttpHeaders.authorizationHeader: authorization,
+        HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8",
+      },
+      body: jsonEncode(toCreate.toJson())
+    );
+
+    if (response.statusCode == 200) {
+      return response.body;
+    }
+
+    throw PlatformException(code: response.statusCode.toString(), message: response.body);
+  }
+
+  Future updateChallenge(SoloChallenge toUpdate, {required String authorization}) async {
+    final http.Response response = await http.put(
+      Uri.parse("$serviceBaseUrl/${toUpdate.id}"),
+      headers: <String, String>{
+        HttpHeaders.authorizationHeader: authorization,
+        HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8",
+      },
+      body: jsonEncode(toUpdate.toJson())
+    );
+
+    if (response.statusCode != 200) {
+      throw PlatformException(code: response.statusCode.toString(), message: response.body);
+    }
+
+  }
 }

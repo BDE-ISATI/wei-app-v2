@@ -17,4 +17,10 @@ class SoloChallengesStore with ChangeNotifier {
   void receivedUpdate() {
     notifyListeners();
   }
+
+  void addChallenge(SoloChallenge challenge) {
+    _challenges![challenge.id!] = challenge;
+
+    notifyListeners();
+  }
 }

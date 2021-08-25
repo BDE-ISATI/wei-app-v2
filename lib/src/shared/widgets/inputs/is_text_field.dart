@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:isati_integration/utils/colors.dart';
 
 class IsTextField extends StatefulWidget {
   const IsTextField({
@@ -55,28 +56,31 @@ class _IsTextFieldState extends State<IsTextField> {
       children: [
         Text(widget.labelText.toUpperCase(), style: const TextStyle(color: Colors.black54, fontSize: 12),),
         const SizedBox(height: 10.0,),
-        TextField(
-          readOnly: widget.readOnly,
-          obscureText: _obscureText,
-          controller: widget.controller,
-          keyboardType: widget.inputType,
-          maxLines: widget.maxLines,
-          decoration: InputDecoration(
-            hintText: widget.hintText,
-            enabledBorder: OutlineInputBorder(
-              borderSide: const BorderSide(color: Colors.black12,),
-              borderRadius: BorderRadius.circular(6.0),
+        Container(
+          color: colorScaffolddWhite,
+          child: TextField(
+            readOnly: widget.readOnly,
+            obscureText: _obscureText,
+            controller: widget.controller,
+            keyboardType: widget.inputType,
+            maxLines: widget.maxLines,
+            decoration: InputDecoration(
+              hintText: widget.hintText,
+              enabledBorder: OutlineInputBorder(
+                borderSide: const BorderSide(color: Colors.black12,),
+                borderRadius: BorderRadius.circular(6.0),
+              ),
+              border: OutlineInputBorder(
+                borderSide: const BorderSide(color: Colors.black12,),
+                borderRadius: BorderRadius.circular(6.0),
+              ),
+              suffixIcon: widget.suffixIcon != null ? Icon(widget.suffixIcon) : !widget.obscureText ? null : InkWell(
+                onTap: _textVisibilityUpdated,
+                child: Icon(_obscureText ? Icons.visibility : Icons.visibility_off),
+              )
             ),
-            border: OutlineInputBorder(
-              borderSide: const BorderSide(color: Colors.black12,),
-              borderRadius: BorderRadius.circular(6.0),
-            ),
-            suffixIcon: widget.suffixIcon != null ? Icon(widget.suffixIcon) : !widget.obscureText ? null : InkWell(
-              onTap: _textVisibilityUpdated,
-              child: Icon(_obscureText ? Icons.visibility : Icons.visibility_off),
-            )
+            onChanged: widget.onChanged,
           ),
-          onChanged: widget.onChanged,
         ),
       ],
     );
