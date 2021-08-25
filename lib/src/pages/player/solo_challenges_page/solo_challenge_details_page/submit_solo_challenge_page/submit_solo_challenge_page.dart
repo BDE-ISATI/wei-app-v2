@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -106,10 +107,14 @@ class _SubmitSoloChallengePageState extends State<SubmitSoloChallengePage> {
     );
 
     if (result != null) {
-      final List<File> files = result.paths.map((path) => File(path!)).toList();
+      final filesBytes = result.files.map((file) => file.bytes).toList();
 
-      for (final file in files) {
-        final String bytes = base64Encode(await file.readAsBytes());
+      for (final file in filesBytes) {
+        if (file == null) {
+          continue;
+        }
+
+        final String bytes = base64Encode(file);
         _medias.add(bytes);
       }
     }
