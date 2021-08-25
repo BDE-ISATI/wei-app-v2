@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:isati_integration/models/team_challenge.dart';
 
@@ -39,6 +41,12 @@ class TeamChallengeStore with ChangeNotifier {
   DateTime get startingDate => challenge.startingDate;
   set startingDate(DateTime value) {
     challenge.startingDate = value;
+    notifyListeners();
+  }
+
+  void updateImage(String imageString) {
+    challenge.challengeImage.image = MemoryImage(base64Decode(imageString));
+
     notifyListeners();
   }
 

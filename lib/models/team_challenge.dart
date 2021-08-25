@@ -1,5 +1,11 @@
+import 'package:isati_integration/services/team_challenges_service.dart';
+
+import 'is_image.dart';
+
 class TeamChallenge {
   String? id;
+
+  late IsImage challengeImage;
 
   String title;
   String description;
@@ -19,7 +25,9 @@ class TeamChallenge {
     required this.shouldCountMembers,
     required this.startingDate,
     required this.endingDate,
-  });
+  }) {
+    challengeImage = IsImage("");
+  }
 
   TeamChallenge.fromMap(Map<String, dynamic> map) : 
     id = map['id'] as String,
@@ -29,7 +37,9 @@ class TeamChallenge {
     numberOfRepetitions = map['numberOfRepetitions'] as int,
     shouldCountMembers = map["shouldCountMembers"] as bool,
     startingDate = DateTime.parse(map['startingDate'] as String),
-    endingDate = DateTime.parse(map['endingDate'] as String);
+    endingDate = DateTime.parse(map['endingDate'] as String) {
+      challengeImage = IsImage("${TeamChallengesService.instance.serviceBaseUrl}/$id/image");
+    }
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{

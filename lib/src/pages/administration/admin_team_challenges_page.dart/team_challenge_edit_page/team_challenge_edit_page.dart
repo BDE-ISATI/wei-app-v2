@@ -9,6 +9,7 @@ import 'package:isati_integration/src/shared/widgets/general/is_button.dart';
 import 'package:isati_integration/src/shared/widgets/general/is_status_message.dart';
 import 'package:isati_integration/src/shared/widgets/inputs/is_check_box.dart';
 import 'package:isati_integration/src/shared/widgets/inputs/is_date_form_field.dart';
+import 'package:isati_integration/src/shared/widgets/inputs/is_image_picker.dart';
 import 'package:isati_integration/src/shared/widgets/inputs/is_text_input.dart';
 import 'package:isati_integration/utils/screen_utils.dart';
 import 'package:provider/provider.dart';
@@ -27,6 +28,7 @@ class _TeamChallengeEditPageState extends State<TeamChallengeEditPage> {
   final TextEditingController _numberOfRepetitionsTextController = TextEditingController();
   
   bool _shouldCountMembers = false;
+  String _newImageString = "";
   DateTime? _startDate = DateTime.now();
   DateTime? _endDate = DateTime.now();
 
@@ -77,6 +79,19 @@ class _TeamChallengeEditPageState extends State<TeamChallengeEditPage> {
                         ),
                         const SizedBox(height: 20,)
                       },
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(8.0),
+                        child: Container(
+                          height: 200,
+                          child: IsImagePicker(
+                            initialImage: teamChallengeStore.challenge.challengeImage.image,
+                            onUpdated: (value) {
+                              _newImageString = value;
+                            },
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 20,),
                       IsTextInput(
                         controller: _titleTextController, 
                         validator: (value) {
@@ -89,6 +104,7 @@ class _TeamChallengeEditPageState extends State<TeamChallengeEditPage> {
                         labelText: "Nom du défis" ,
                         hintText: "La poulette russe",
                       ),
+                      // ignore: equal_elements_in_set
                       const SizedBox(height: 20,),
                        IsTextInput(
                         controller: _descriptionTextController, 
@@ -216,11 +232,15 @@ class _TeamChallengeEditPageState extends State<TeamChallengeEditPage> {
     teamChallengeStore.startingDate = _startDate!;
     teamChallengeStore.endingDate = _endDate!;
 
+    if (_newImageString.isNotEmpty) {
+      teamChallengeStore.updateImage(_newImageString);
+    }
+
     try {
       final appUserStore = Provider.of<AppUserStore>(context, listen: false);
 
       if (teamChallengeStore.challenge.id == null) {
-        final String id = await TeamChallengesService.instance.createChallenge(teamChallengeStore.challenge, authorization: appUserStore.authenticationHeader); 
+        final String id = await TeamChallengesService.instance.createChallenge(teamChallengeStore.challenge, _newImageString, authorization: appUserStore.authenticationHeader); 
 
         Navigator.of(context).pop(
           TeamChallenge(id, 
@@ -235,7 +255,7 @@ class _TeamChallengeEditPageState extends State<TeamChallengeEditPage> {
         );
       }
       else {
-        await TeamChallengesService.instance.updateChallenge(teamChallengeStore.challenge, authorization: appUserStore.authenticationHeader);
+        await TeamChallengesService.instance.updateChallenge(teamChallengeStore.challenge, _newImageString, authorization: appUserStore.authenticationHeader);
 
         Navigator.of(context).pop();
       }

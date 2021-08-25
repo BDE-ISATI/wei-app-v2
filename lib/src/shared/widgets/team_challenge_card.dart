@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:isati_integration/src/providers/team_challenge_store.dart';
 import 'package:isati_integration/src/shared/widgets/general/is_button.dart';
 import 'package:isati_integration/src/shared/widgets/general/is_card.dart';
+import 'package:isati_integration/src/shared/widgets/general/is_image_widget.dart';
 import 'package:provider/provider.dart';
 
 class TeamChallengeCard extends StatelessWidget {
@@ -54,7 +55,11 @@ class TeamChallengeCard extends StatelessWidget {
                   topLeft: Radius.circular(8),
                   topRight: Radius.circular(8),
                 ),
-                child: Image.asset("assets/images/background.jpg", height: 180, fit: BoxFit.cover,),
+                child: IsImageWidget(
+                  source: teamChallengeStore.challenge.challengeImage,
+                  height: 100,
+                  fit: BoxFit.cover,
+                )
               ),
               // Container(
               //   color: colorPrimary,

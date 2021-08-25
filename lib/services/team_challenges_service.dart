@@ -34,14 +34,17 @@ class TeamChallengesService {
     throw PlatformException(code: response.statusCode.toString(), message: response.body);
   }
 
-  Future<String> createChallenge(TeamChallenge toCreate, {required String authorization}) async {
+  Future<String> createChallenge(TeamChallenge toCreate, String image, {required String authorization}) async {
     final http.Response response = await http.post(
       Uri.parse(serviceBaseUrl),
       headers: <String, String>{
         HttpHeaders.authorizationHeader: authorization,
         HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8",
       },
-      body: jsonEncode(toCreate.toJson())
+      body: jsonEncode(<String, dynamic>{
+        ...toCreate.toJson(),
+        "challengeImage": image.isNotEmpty ? image : null
+      })
     );
 
     if (response.statusCode == 200) {
@@ -51,14 +54,17 @@ class TeamChallengesService {
     throw PlatformException(code: response.statusCode.toString(), message: response.body);
   }
 
-  Future updateChallenge(TeamChallenge toUpdate, {required String authorization}) async {
+  Future updateChallenge(TeamChallenge toUpdate, String image, {required String authorization}) async {
     final http.Response response = await http.put(
       Uri.parse("$serviceBaseUrl/${toUpdate.id}"),
       headers: <String, String>{
         HttpHeaders.authorizationHeader: authorization,
         HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8",
       },
-      body: jsonEncode(toUpdate.toJson())
+      body: jsonEncode(<String, dynamic>{
+        ...toUpdate.toJson(),
+        "challengeImage": image.isNotEmpty ? image : null
+      })
     );
 
     if (response.statusCode != 200) {

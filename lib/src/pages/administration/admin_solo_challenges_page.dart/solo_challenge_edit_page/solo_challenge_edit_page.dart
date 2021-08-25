@@ -217,6 +217,10 @@ class _SoloChallengeEditPageState extends State<SoloChallengeEditPage> {
     soloChallengeStore.startingDate = _startDate!;
     soloChallengeStore.endingDate = _endDate!;
 
+    if (_newImageString.isNotEmpty) {
+      soloChallengeStore.updateImage(_newImageString);
+    }
+
     try {
       final appUserStore = Provider.of<AppUserStore>(context, listen: false);
 

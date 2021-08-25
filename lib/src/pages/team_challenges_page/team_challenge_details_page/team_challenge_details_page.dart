@@ -9,6 +9,7 @@ import 'package:isati_integration/src/providers/team_challenge_store.dart';
 import 'package:isati_integration/src/providers/teams_store.dart';
 import 'package:isati_integration/src/shared/widgets/general/is_app_bar.dart';
 import 'package:isati_integration/src/shared/widgets/general/is_button.dart';
+import 'package:isati_integration/src/shared/widgets/general/is_image_widget.dart';
 import 'package:isati_integration/src/shared/widgets/general/is_status_message.dart';
 import 'package:isati_integration/src/shared/widgets/inputs/is_dropdown.dart';
 import 'package:isati_integration/src/shared/widgets/inputs/is_text_input.dart';
@@ -252,7 +253,7 @@ class _TeamChallengeDetailsPageState extends State<TeamChallengeDetailsPage> {
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(8.0),
-        child: Image.asset("assets/images/background.jpg", fit: BoxFit.cover,)
+        child: IsImageWidget(source: challenge.challengeImage, fit: BoxFit.cover,)
       )
     );
   }
