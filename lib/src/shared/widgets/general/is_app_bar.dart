@@ -46,10 +46,13 @@ class IsAppBar extends StatelessWidget implements PreferredSizeWidget {
               ),
             ),
             if (title is Text)
-              Flexible(
-                child: FittedBox(
-                  fit: BoxFit.fitWidth,
-                  child: title
+              DefaultTextStyle(
+                style: const TextStyle(color: colorBlack, fontSize: 24),
+                child: Flexible(
+                  child: FittedBox(
+                    fit: BoxFit.fitWidth,
+                    child: title
+                  ),
                 ),
               )
             else
