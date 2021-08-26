@@ -27,4 +27,8 @@ class AppUserStore with ChangeNotifier {
 
   String? get id => (_user != null) ? _user!.id : null;
   String get authenticationHeader => (_user != null) ? _user!.authenticationHeader : "Invalid";
+
+  void hasBeenUpdated() {
+    notifyListeners();
+  }
 }

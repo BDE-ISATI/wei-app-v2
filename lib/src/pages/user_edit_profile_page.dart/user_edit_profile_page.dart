@@ -17,6 +17,10 @@ import 'package:isati_integration/utils/screen_utils.dart';
 import 'package:provider/provider.dart';
 
 class UserEditProfilePage extends StatefulWidget {
+  const UserEditProfilePage({Key? key, this.shouldPopOnSave = true}) : super(key: key);
+
+  final bool shouldPopOnSave;
+
   @override
   State<UserEditProfilePage> createState() => _UserEditProfilePageState();
 }
@@ -38,6 +42,7 @@ class _UserEditProfilePageState extends State<UserEditProfilePage> {
   bool _initialized = false;
   bool _isLoading = false;
   String _errorMessage = "";
+  String _sucessMessage  = "";
 
   @override
   Widget build(BuildContext context) {
@@ -79,6 +84,14 @@ class _UserEditProfilePageState extends State<UserEditProfilePage> {
                           message: "Nous n'avont pas pu sauvegarder le profile : $_errorMessage",
                         ),
                         const SizedBox(height: 20,)
+                      }
+                      else if (_sucessMessage.isNotEmpty) ...{
+                        IsStatusMessage(
+                          type: IsStatusMessageType.success,
+                          title: "Bravo",
+                          message: _sucessMessage
+                        ),
+                        const SizedBox(height: 20,),
                       },
                       Column(
                         mainAxisSize: MainAxisSize.min,
@@ -127,6 +140,26 @@ class _UserEditProfilePageState extends State<UserEditProfilePage> {
                         }, 
                         labelText: "Nom" ,
                         hintText: "DENIS...",
+                      ),
+                      // ignore: equal_elements_in_set
+                      const SizedBox(height: 20,),
+                      IsTextInput(
+                        controller: _emailTextController, 
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return "Vous devez rentrer une email";
+                          }
+
+                          final bool emailValid = RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(value);
+
+                          if (!emailValid) {
+                            return "L'email semble invalide...";
+                          }
+
+                          return null;
+                        }, 
+                        labelText: "Adresse email" ,
+                        hintText: "contact@felrise.com...",
                       ),
                       // ignore: equal_elements_in_set
                       const SizedBox(height: 20,),
@@ -230,6 +263,7 @@ class _UserEditProfilePageState extends State<UserEditProfilePage> {
     setState(() {
       _isLoading = true;
       _errorMessage = "";
+      _sucessMessage = "";
     });
     
     userStore.user.firstName = _firstNameController.text;
@@ -246,6 +280,12 @@ class _UserEditProfilePageState extends State<UserEditProfilePage> {
 
     userStore.hasBeenUpdated();
 
+    final appUserStore = Provider.of<AppUserStore>(context, listen: false);
+
+    if (appUserStore.id == userStore.user.id) {
+      appUserStore.hasBeenUpdated();
+    }
+
     try {
       final appUserStore = Provider.of<AppUserStore>(context, listen: false);
 
@@ -256,18 +296,28 @@ class _UserEditProfilePageState extends State<UserEditProfilePage> {
         authorization: appUserStore.authenticationHeader
       );
 
-      Navigator.of(context).pop(true);
+      setState(() {
+        _isLoading = false;
+        _errorMessage = "";
+        _sucessMessage = "Bravo, votre profile à bien été mise à jour";
+      });
+
+      if (widget.shouldPopOnSave) {
+        Navigator.of(context).pop(true);
+      }
     }
     on PlatformException catch(e) {
       setState(() {
         _isLoading = false; 
         _errorMessage = "Impossible de sauvegarder l'utilisateur : ${e.code} ; ${e.message}";
+        _sucessMessage = "";
       });
     }
     on Exception catch(e) {
       setState(() {
         _isLoading = false;
         _errorMessage = "Une erreur inconnue s'est produite : $e";
+        _sucessMessage = "";
       });
     }
   }

@@ -116,7 +116,7 @@ class _AdminUsersPageState extends State<AdminUsersPage> {
       MaterialPageRoute(
         builder: (context) => ChangeNotifierProvider.value(
           value: userStore,
-          builder: (context, child) => UserEditProfilePage(),
+          builder: (context, child) => const UserEditProfilePage(),
         ),
       )
     );
