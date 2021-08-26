@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:isati_integration/models/page_item.dart';
+import 'package:isati_integration/src/pages/administration/admin_forms_page/admin_forms_page.dart';
 import 'package:isati_integration/src/pages/administration/admin_solo_challenges_page.dart/admin_solo_challenges_page.dart';
 import 'package:isati_integration/src/pages/administration/admin_team_challenges_page.dart/admin_team_challenge_page.dart';
 import 'package:isati_integration/src/pages/administration/admin_teams_page/admin_teams_page.dart';
@@ -65,6 +66,15 @@ final List<Widget> pages = [
         ),
       ),
     ),
+    ClipRect(
+      child: Navigator(
+        key: AppManager.instance.adminFormsKey,
+        onGenerateRoute: (route) => MaterialPageRoute<dynamic>(
+          settings: route,
+          builder: (context) => AdminFormsPage()
+        ),
+      ),
+    ),
   ];
 
   final List<PageItem> pageItems = const [
@@ -97,6 +107,11 @@ final List<Widget> pages = [
       index: 5,
       title: "Les utilisateurs",
       icon: Icons.account_circle
+    ),
+    PageItem(
+      index: 6,
+      title: "Les questionnaires",
+      icon: Icons.question_answer
     ),
   ];
 

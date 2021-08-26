@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
+import 'package:isati_integration/models/is_form.dart';
 import 'package:isati_integration/models/is_form_qa.dart';
 import 'package:isati_integration/utils/constants.dart';
 
@@ -12,6 +13,21 @@ class FormsService {
   final String serviceBaseUrl = "$kApiBaseUrl/forms";
 
   static final FormsService instance = FormsService._privateConstructor();
+
+  Future<IsForm> getFormForUser(String userId, {required String authorization}) async {
+    final http.Response response = await http.get(
+      Uri.parse("$serviceBaseUrl/users/$userId"),
+      headers: <String, String>{
+        HttpHeaders.authorizationHeader: authorization,
+      }
+    );
+
+    if (response.statusCode == 200) {
+      return IsForm.fromMap(jsonDecode(response.body) as Map<String, dynamic>);
+    }
+
+    throw PlatformException(code: response.statusCode.toString(), message: response.body);
+  }
 
   Future<String> submitForm(String userId, List<IsFormQA> formQas, String image1, String image2, String image3) async {
     final http.Response response = await http.post(
