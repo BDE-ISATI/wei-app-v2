@@ -1,15 +1,20 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:isati_integration/models/is_form_qa.dart';
 import 'package:isati_integration/models/user.dart';
 import 'package:isati_integration/services/authentication_service.dart';
 import 'package:isati_integration/services/forms_service.dart';
+import 'package:isati_integration/src/pages/register_page/widgets/is_painter.dart';
 import 'package:isati_integration/src/pages/register_page/widgets/register_header.dart';
 import 'package:isati_integration/src/shared/widgets/general/is_button.dart';
 import 'package:isati_integration/src/shared/widgets/general/is_status_message.dart';
 import 'package:isati_integration/src/shared/widgets/inputs/is_dropdown.dart';
 import 'package:isati_integration/src/shared/widgets/inputs/is_text_input.dart';
+import 'package:isati_integration/utils/colors.dart';
 import 'package:isati_integration/utils/screen_utils.dart';
+import 'package:painter/painter.dart';
 import 'package:tuple/tuple.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -28,6 +33,10 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController _passwordConfirmTextController = TextEditingController();
   
   // Questionnaire
+  final PainterController _drawing1Controller = PainterController();
+  final PainterController _drawing2Controller = PainterController();
+  final PainterController _drawing3Controller = PainterController();
+
   // "Closed" questions
   final String _qMateriauxTI = "Est-tu en matériaux ou en TI ?";
   final List<IsFormQA> _asMateriauxTI = [];
@@ -116,6 +125,16 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   void initState() {
     super.initState();
+
+    _drawing1Controller.thickness = 2.0;
+    _drawing1Controller.drawColor = colorPrimary;
+    _drawing1Controller.backgroundColor = colorScaffolddWhite;
+    _drawing2Controller.thickness = 2.0;
+    _drawing2Controller.drawColor = colorPrimary;
+    _drawing2Controller.backgroundColor = colorScaffolddWhite;
+    _drawing3Controller.thickness = 2.0;
+    _drawing3Controller.drawColor = colorPrimary;
+    _drawing3Controller.backgroundColor = colorScaffolddWhite;
 
     _asMateriauxTI.addAll([
       IsFormQA(_qMateriauxTI, "TI", 0),
@@ -604,7 +623,34 @@ class _RegisterPageState extends State<RegisterPage> {
             validator: null,
           ),
           const SizedBox(height: 20,),
-        }
+        },
+        SizedBox(
+          height: 300,
+          width: 300,
+          child: IsPainter(
+            controller: _drawing1Controller,
+            title: "Toi en dessin",
+          ),
+        ),
+        const SizedBox(height: 20,),
+        SizedBox(
+          height: 300,
+          width: 300,
+          child: IsPainter(
+            controller: _drawing2Controller,
+            title: "Ce que tu aimes le plus",
+          ),
+        ),
+        const SizedBox(height: 20,),
+        SizedBox(
+          height: 300,
+          width: 300,
+          child: IsPainter(
+            controller: _drawing3Controller,
+            title: "Dessine ton smiley fav'",
+          ),
+        ),
+        const SizedBox(height: 20,),
       ]
     );
   }
@@ -613,6 +659,10 @@ class _RegisterPageState extends State<RegisterPage> {
     if (!_formKey.currentState!.validate()) {
       return;
     }
+
+    final PictureDetails drawing1 = _drawing1Controller.finish();
+    final PictureDetails drawing2 = _drawing2Controller.finish();
+    final PictureDetails drawing3 = _drawing3Controller.finish();
 
     setState(() {
       _isLoading = true;
@@ -642,9 +692,9 @@ class _RegisterPageState extends State<RegisterPage> {
             IsFormQA(openQuestion.item1, openQuestion.item2.text, 0)
       ];
 
-      const String image1 = "";
-      const String image2 = "";
-      const String image3 = "";
+      final String image1 = base64Encode(await drawing1.toPNG());
+      final String image2 = base64Encode(await drawing2.toPNG());
+      final String image3 = base64Encode(await drawing3.toPNG());
 
       await FormsService.instance.submitForm(userId, formQas, image1, image2, image3);
 
