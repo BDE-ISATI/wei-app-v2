@@ -212,7 +212,8 @@ class _UserEditProfilePageState extends State<UserEditProfilePage> {
                         labelText: "Nouveau mot de passe",
                         hintText: "Mot de passe",
                         validator: (value) {
-                          if (_passwordConfirmTextController.text.isNotEmpty) {
+                          if (_passwordConfirmTextController.text.isNotEmpty &&
+                              _passwordConfirmTextController.text != value) {
                             return "Le mot de passe et la confirmation ne correspondent pas";
                           }
 

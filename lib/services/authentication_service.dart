@@ -17,6 +17,30 @@ class AuthenticationService {
   static final AuthenticationService instance = AuthenticationService._privateConstructor();
 
   // Web services
+  Future<String> register(User userToRegister, String password) async {
+    final userJson = userToRegister.toJson();
+
+    // Since password is never stored, we need to add it
+    // manually to the register request
+    userJson.addAll(<String, dynamic>{
+      "password": password
+    });
+
+    final http.Response response = await http.post(
+      Uri.parse("$serviceBaseUrl/register"),
+      headers: <String, String>{
+        HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8",
+      },
+      body: jsonEncode(userJson)
+    );
+
+    if (response.statusCode == 200) {
+      return response.body;
+    }
+
+    throw PlatformException(code: response.statusCode.toString(), message: response.body);
+  }
+
   Future<User> login(String username, String password) async {
     final http.Response response = await http.post(
       Uri.parse("$serviceBaseUrl/login"),
