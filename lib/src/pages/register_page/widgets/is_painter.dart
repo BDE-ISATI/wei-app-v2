@@ -37,6 +37,9 @@ class _IsPainter extends State<IsPainter> {
           icon: const Icon(Icons.delete),
           tooltip: 'Clear',
           onPressed: widget.controller.clear),
+          IconButton(icon: const Icon(Icons.check), onPressed: () {
+            Navigator.of(context).pop(widget.controller.finish());
+          })
     ];
     return ClipRect(
         child: Navigator(

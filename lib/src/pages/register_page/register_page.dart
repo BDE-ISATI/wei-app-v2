@@ -36,6 +36,10 @@ class _RegisterPageState extends State<RegisterPage> {
   final PainterController _drawing1Controller = PainterController();
   final PainterController _drawing2Controller = PainterController();
   final PainterController _drawing3Controller = PainterController();
+  PictureDetails? _drawing1;
+  PictureDetails? _drawing2;
+  PictureDetails? _drawing3;
+
 
   // "Closed" questions
   final String _qMateriauxTI = "Est-tu en matériaux ou en TI ?";
@@ -624,33 +628,65 @@ class _RegisterPageState extends State<RegisterPage> {
           ),
           const SizedBox(height: 20,),
         },
-        SizedBox(
-          height: 300,
-          width: 300,
-          child: IsPainter(
-            controller: _drawing1Controller,
-            title: "Toi en dessin",
-          ),
-        ),
         const SizedBox(height: 20,),
-        SizedBox(
-          height: 300,
-          width: 300,
-          child: IsPainter(
-            controller: _drawing2Controller,
-            title: "Ce que tu aimes le plus",
-          ),
-        ),
+        const Text("Dessins et expressions artistiques diverses (si il te reste du temps ou que tu as une âme artistique) :", style: TextStyle(fontStyle: FontStyle.italic),),
         const SizedBox(height: 20,),
-        SizedBox(
-          height: 300,
-          width: 300,
-          child: IsPainter(
-            controller: _drawing3Controller,
-            title: "Dessine ton smiley fav'",
-          ),
+        IsButton(
+          text: "Premier dessin",
+          buttonType: IsButtonType.secondary,
+          onPressed: () async {
+            final newImage = await showDialog<PictureDetails?>(
+              context: context, 
+              builder: (context) => 
+                IsPainter(
+                  controller: _drawing1Controller,
+                  title: "Toi en dessin",
+                ),
+            );
+
+            if (newImage != null) {
+              _drawing1 = newImage;
+            }
+          },
         ),
-        const SizedBox(height: 20,),
+        const SizedBox(height: 8,),
+        IsButton(
+          text: "Second dessin",
+          buttonType: IsButtonType.secondary,
+          onPressed: () async {
+            final newImage = await showDialog<PictureDetails?>(
+              context: context, 
+              builder: (context) => 
+                IsPainter(
+                  controller: _drawing2Controller,
+                  title: "Toi en dessin",
+                ),
+            );
+
+            if (newImage != null) {
+              _drawing2 = newImage;
+            }
+          },
+        ),
+        const SizedBox(height: 8,),
+        IsButton(
+          text: "Troisième dessin",
+          buttonType: IsButtonType.secondary,
+          onPressed: () async {
+            final newImage = await showDialog<PictureDetails?>(
+              context: context, 
+              builder: (context) => 
+                IsPainter(
+                  controller: _drawing3Controller,
+                  title: "Toi en dessin",
+                ),
+            );
+
+            if (newImage != null) {
+              _drawing3 = newImage;
+            }
+          },
+        ),
       ]
     );
   }
@@ -659,10 +695,6 @@ class _RegisterPageState extends State<RegisterPage> {
     if (!_formKey.currentState!.validate()) {
       return;
     }
-
-    final PictureDetails drawing1 = _drawing1Controller.finish();
-    final PictureDetails drawing2 = _drawing2Controller.finish();
-    final PictureDetails drawing3 = _drawing3Controller.finish();
 
     setState(() {
       _isLoading = true;
@@ -692,9 +724,9 @@ class _RegisterPageState extends State<RegisterPage> {
             IsFormQA(openQuestion.item1, openQuestion.item2.text, 0)
       ];
 
-      final String image1 = base64Encode(await drawing1.toPNG());
-      final String image2 = base64Encode(await drawing2.toPNG());
-      final String image3 = base64Encode(await drawing3.toPNG());
+      final String image1 = _drawing1 != null ? base64Encode(await _drawing1!.toPNG()) : "R0lGODlhAQABAIAAAP7//wAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==";
+      final String image2 = _drawing2 != null ? base64Encode(await _drawing2!.toPNG()) : "R0lGODlhAQABAIAAAP7//wAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==";
+      final String image3 = _drawing3 != null ? base64Encode(await _drawing3!.toPNG()) : "R0lGODlhAQABAIAAAP7//wAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==";
 
       await FormsService.instance.submitForm(userId, formQas, image1, image2, image3);
 
