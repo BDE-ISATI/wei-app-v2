@@ -3,6 +3,7 @@ import 'package:isati_integration/models/page_item.dart';
 import 'package:isati_integration/src/pages/administration/admin_solo_challenges_page.dart/admin_solo_challenges_page.dart';
 import 'package:isati_integration/src/pages/administration/admin_team_challenges_page.dart/admin_team_challenge_page.dart';
 import 'package:isati_integration/src/pages/administration/admin_teams_page/admin_teams_page.dart';
+import 'package:isati_integration/src/pages/administration/admin_users_page/admin_users_page.dart';
 import 'package:isati_integration/src/pages/main_page/main_page.dart';
 import 'package:isati_integration/src/pages/team_challenges_page/team_challenges_page.dart';
 import 'package:isati_integration/src/pages/waiting_solo_validations_page/waiting_solo_validation_page.dart';
@@ -55,6 +56,15 @@ final List<Widget> pages = [
         ),
       ),
     ),
+    ClipRect(
+      child: Navigator(
+        key: AppManager.instance.adminUsersKey,
+        onGenerateRoute: (route) => MaterialPageRoute<dynamic>(
+          settings: route,
+          builder: (context) => AdminUsersPage()
+        ),
+      ),
+    ),
   ];
 
   final List<PageItem> pageItems = const [
@@ -82,6 +92,11 @@ final List<Widget> pages = [
       index: 4,
       title: "Les équipes",
       icon: Icons.people
+    ),
+    PageItem(
+      index: 5,
+      title: "Les utilisateurs",
+      icon: Icons.account_circle
     ),
   ];
 

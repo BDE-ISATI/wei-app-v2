@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:isati_integration/models/is_image.dart';
 import 'package:isati_integration/src/providers/solo_challenge_store.dart';
 import 'package:isati_integration/src/shared/widgets/general/is_button.dart';
 import 'package:isati_integration/src/shared/widgets/general/is_card.dart';

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:isati_integration/models/user.dart';
 import 'package:isati_integration/src/providers/app_user_store.dart';
 import 'package:isati_integration/src/shared/widgets/general/is_icon_button.dart';
+import 'package:isati_integration/src/shared/widgets/general/is_image_widget.dart';
 import 'package:isati_integration/utils/colors.dart';
 import 'package:provider/provider.dart';
 
@@ -36,7 +37,12 @@ class IsDrawerProfileInfo extends StatelessWidget {
                   borderRadius: BorderRadius.circular(20),
                   child: Container(
                     color: colorPrimary,
-                    child: Image.asset("assets/images/logo_white.png", width: 20,)
+                    child: IsImageWidget(
+                      source: appUserStore.user!.profilePicture,
+                      defaultPadding: const EdgeInsets.all(4.0),
+                      fit: BoxFit.cover,
+                      width: 20,
+                    )
                   ),
                 ),
               ),

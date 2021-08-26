@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -10,10 +9,13 @@ class IsImagePicker extends StatefulWidget {
   const IsImagePicker({
     Key? key, 
     this.initialImage,
+    this.defaultPadding = const EdgeInsets.all(20.0),
     this.onUpdated
   }) : super(key: key);
 
   final MemoryImage? initialImage;
+
+  final EdgeInsets defaultPadding;
 
   final Function(String)? onUpdated;
 
@@ -49,7 +51,7 @@ class _IsImagePickerState extends State<IsImagePicker> {
               Image(image: _image!, fit: BoxFit.cover,) :
               Container(
                 color: colorPrimary,
-                padding: const EdgeInsets.all(20),
+                padding: widget.defaultPadding,
                 child: Image.asset("assets/images/logo_white.png"),
               ),
           ),

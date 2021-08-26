@@ -7,6 +7,7 @@ import 'package:isati_integration/src/providers/solo_validations_store.dart';
 import 'package:isati_integration/src/providers/users_store.dart';
 import 'package:isati_integration/src/shared/widgets/general/is_button.dart';
 import 'package:isati_integration/src/shared/widgets/general/is_card.dart';
+import 'package:isati_integration/src/shared/widgets/general/is_image_widget.dart';
 import 'package:isati_integration/utils/colors.dart';
 import 'package:provider/provider.dart';
 
@@ -36,7 +37,12 @@ class WaitingValidationCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(55),
                   child: Container(
                     color: colorPrimary,
-                    child: Image.asset("assets/images/logo_white.png", width: 64),
+                    child: IsImageWidget(
+                      source: user.profilePicture, 
+                      defaultPadding: const EdgeInsets.all(16.0),
+                      fit: BoxFit.cover,
+                      width: 64
+                    )
                   ),
                 ),
               ),

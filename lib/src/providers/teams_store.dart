@@ -12,6 +12,7 @@ class TeamsStore with ChangeNotifier {
     return _teams!.values.toList();
   } 
 
+  Map<String, Team> get teams => _teams!;
   List<Team> get teamsList => _teams!.values.toList();
 
   void addTeam(Team team) {

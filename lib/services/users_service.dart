@@ -25,13 +25,19 @@ class UsersService {
 
     if (response.statusCode == 200) {
       final List<dynamic> jsonUsers = jsonDecode(response.body) as List<dynamic>;
-      final Map<String, User> teams = {};
+      final Map<String, User> users = {};
 
       for (final map in jsonUsers) {
-        teams[map['id'] as String] = User.fromMap(map as Map<String, dynamic>);
+        Team? userTeam;      
+
+        if ((map['teamId'] as String?) != null) {
+          userTeam = await TeamsService.instance.getTeam(map["teamId"] as String, authorization: authorization);
+        }
+        
+        users[map['id'] as String] = User.fromMap(map as Map<String, dynamic>, team: userTeam);
       }
 
-      return teams;
+      return users;
     }
 
     throw PlatformException(code: response.statusCode.toString(), message: response.body);
@@ -57,5 +63,28 @@ class UsersService {
     }
 
     throw PlatformException(code: response.statusCode.toString(), message: response.body);
+  }
+
+  Future updateUser(User toUpdate, String profilePicture, {
+    String? newPassword,
+    required String authorization
+  }) async {
+    final http.Response response = await http.put(
+      Uri.parse("$serviceBaseUrl/${toUpdate.id}"),
+      headers: <String, String>{
+        HttpHeaders.authorizationHeader: authorization,
+        HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8",
+      },
+      body: jsonEncode(<String, dynamic>{
+        ...toUpdate.toJson(),
+        "profilePicture": profilePicture.isNotEmpty ? profilePicture : null,
+        "password": newPassword
+      })
+    );
+
+    if (response.statusCode != 200) {
+      throw PlatformException(code: response.statusCode.toString(), message: response.body);
+    }
+
   }
 }

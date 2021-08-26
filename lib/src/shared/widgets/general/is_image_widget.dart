@@ -8,6 +8,7 @@ class IsImageWidget extends StatelessWidget {
   const IsImageWidget({Key
     ? key, 
     required this.source,
+    this.defaultPadding = const EdgeInsets.all(20.0),
     this.width,
     this.height,
     this.fit
@@ -15,6 +16,7 @@ class IsImageWidget extends StatelessWidget {
 
   final IsImage source;
 
+  final EdgeInsets defaultPadding;
   final double? width;
   final double? height;
   final BoxFit? fit;
@@ -53,7 +55,7 @@ class IsImageWidget extends StatelessWidget {
   Widget _buildEmptyImage({required Widget child, bool brighter = true}) {
     return Container(
       color: brightenColor(colorPrimary, percent: brighter ? 85 : 10),
-      padding: const EdgeInsets.all(20),
+      padding: defaultPadding,
       width: width,
       height: height,
       child: child,
