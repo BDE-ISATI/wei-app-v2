@@ -10,6 +10,7 @@ import 'package:isati_integration/src/pages/register_page/widgets/is_painter.dar
 import 'package:isati_integration/src/pages/register_page/widgets/register_header.dart';
 import 'package:isati_integration/src/shared/widgets/general/is_button.dart';
 import 'package:isati_integration/src/shared/widgets/general/is_status_message.dart';
+import 'package:isati_integration/src/shared/widgets/inputs/is_check_box.dart';
 import 'package:isati_integration/src/shared/widgets/inputs/is_dropdown.dart';
 import 'package:isati_integration/src/shared/widgets/inputs/is_text_input.dart';
 import 'package:isati_integration/utils/colors.dart';
@@ -64,16 +65,16 @@ class _RegisterPageState extends State<RegisterPage> {
 
   final String _qYourPartyType = "En soirée tu es plutôt du genre à :";
   final List<IsFormQA> _asYourPartyType = [];
-  int _currentYourPartyType = 0;
+  final List<int> _currentYourPartyType = [];
 
   final String _qBestSunday = "Un dimanche idéale pour moi c’est :";
   final List<IsFormQA> _asBestSunday = [];
-  int _currentBestSunday = 0;
+  final List<int> _currentBestSunday = [];
 
 
   final String _qDifficultSituation = "Dans une situation difficile comment réagis- tu ?";
-  final List<IsFormQA> _asDifficultSitaution = [];
-  int _currentDifficultSituation = 0;
+  final List<IsFormQA> _asDifficultSituation = [];
+  final List<int> _currentDifficultSituation = [];
 
   final String _qIntroExtraVerti = "T’es plutôt introverti.e ou extraverti.e ?";
   final List<IsFormQA> _asIntroExtraVerti = [];
@@ -185,7 +186,7 @@ class _RegisterPageState extends State<RegisterPage> {
       IsFormQA(_qBestSunday, "Faire une maraude et donner mon temps pour ceux qui en ont besoin", 2),
     ]);
 
-    _asDifficultSitaution.addAll([
+    _asDifficultSituation.addAll([
       IsFormQA(_qDifficultSituation, "Je chante les lacs du Connemara", 2),
       IsFormQA(_qDifficultSituation, "Je fais trois tours de corde à sauter sans sauter", 2),
       IsFormQA(_qDifficultSituation, "Je pars élever des chèvres en Sibérie", 2),
@@ -481,48 +482,84 @@ class _RegisterPageState extends State<RegisterPage> {
         ),
         const SizedBox(height: 20,),
         // En soirée tu es plutôt du genre à :
-        IsDropdown<int>(
-          label: _qYourPartyType,
-          items: {
-            for (int i = 0; i < _asYourPartyType.length; ++i)
-              i: _asYourPartyType[i].answer
-          },
-          currentValue: _currentYourPartyType,
-          onChanged: (value) {
-            setState(() {
-              _currentYourPartyType = value ?? 0;
-            });
-          },
+        Flexible(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(_qYourPartyType.toUpperCase(), style: const TextStyle(color: Colors.black54, fontSize: 12),),
+              const SizedBox(height: 8,),
+              for (int i = 0; i < _asYourPartyType.length; ++i)
+                IsCheckBox(
+                  text: _asYourPartyType[i].answer,
+                  value: _currentYourPartyType.contains(i),
+                  onChanged: (isChecked) {
+                    setState(() {
+                      if (isChecked ?? false) {
+                        _currentYourPartyType.add(i);
+                      }
+                      else {
+                        _currentYourPartyType.remove(i);
+                      }
+                    });
+                  },
+                )
+            ],
+          ),
         ),
         const SizedBox(height: 20,),
         // Un dimanche idéale pour moi c’est :
-        IsDropdown<int>(
-          label: _qBestSunday,
-          items: {
-            for (int i = 0; i < _asBestSunday.length; ++i)
-              i: _asBestSunday[i].answer
-          },
-          currentValue: _currentBestSunday,
-          onChanged: (value) {
-            setState(() {
-              _currentBestSunday = value ?? 0;
-            });
-          },
+        Flexible(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(_qBestSunday.toUpperCase(), style: const TextStyle(color: Colors.black54, fontSize: 12),),
+              const SizedBox(height: 8,),
+              for (int i = 0; i < _asBestSunday.length; ++i)
+                IsCheckBox(
+                  text: _asBestSunday[i].answer,
+                  value: _currentBestSunday.contains(i),
+                  onChanged: (isChecked) {
+                    setState(() {
+                      if (isChecked ?? false) {
+                        _currentBestSunday.add(i);
+                      }
+                      else {
+                        _currentBestSunday.remove(i);
+                      }
+                    });
+                  },
+                )
+            ],
+          ),
         ),
         const SizedBox(height: 20,),
         // Dans une situation difficile comment réagis- tu ?
-        IsDropdown<int>(
-          label: _qDifficultSituation,
-          items: {
-            for (int i = 0; i < _asDifficultSitaution.length; ++i)
-              i: _asDifficultSitaution[i].answer
-          },
-          currentValue: _currentDifficultSituation,
-          onChanged: (value) {
-            setState(() {
-              _currentDifficultSituation = value ?? 0;
-            });
-          },
+        Flexible(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(_qDifficultSituation.toUpperCase(), style: const TextStyle(color: Colors.black54, fontSize: 12),),
+              const SizedBox(height: 8,),
+              for (int i = 0; i < _asDifficultSituation.length; ++i)
+                IsCheckBox(
+                  text: _asDifficultSituation[i].answer,
+                  value: _currentDifficultSituation.contains(i),
+                  onChanged: (isChecked) {
+                    setState(() {
+                      if (isChecked ?? false) {
+                        _currentDifficultSituation.add(i);
+                      }
+                      else {
+                        _currentDifficultSituation.remove(i);
+                      }
+                    });
+                  },
+                )
+            ],
+          ),
         ),
         const SizedBox(height: 20,),
         // T’es plutôt introverti.e ou extraverti.e ?
@@ -659,7 +696,7 @@ class _RegisterPageState extends State<RegisterPage> {
               builder: (context) => 
                 IsPainter(
                   controller: _drawing2Controller,
-                  title: "Toi en dessin",
+                  title: "Ce que tu aimes le plus",
                 ),
             );
 
@@ -678,7 +715,7 @@ class _RegisterPageState extends State<RegisterPage> {
               builder: (context) => 
                 IsPainter(
                   controller: _drawing3Controller,
-                  title: "Toi en dessin",
+                  title: "Dessine ton smiley fav'",
                 ),
             );
 
@@ -705,14 +742,35 @@ class _RegisterPageState extends State<RegisterPage> {
     try {
       final String userId = await _registerUser();
 
+      final yourPartyTypeAnswers = StringBuffer();
+      int yourPartyTypeScore = 0;
+      for (final index in _currentYourPartyType) {
+        yourPartyTypeAnswers.write(", ${_asYourPartyType[index].answer}");
+        yourPartyTypeScore += _asYourPartyType[index].value;
+      }
+
+      final bestSundayAnswers = StringBuffer();
+      int bestSundayScore = 0;
+      for (final index in _currentBestSunday) {
+        bestSundayAnswers.write(", ${_asBestSunday[index].answer}");
+        bestSundayScore += _asBestSunday[index].value;
+      }
+
+      final difficultSituationAnswers = StringBuffer();
+      int difficultSituationScore = 0;
+      for (final index in _currentDifficultSituation) {
+        difficultSituationAnswers.write(", ${_asDifficultSituation[index].answer}");
+        difficultSituationScore += _asDifficultSituation[index].value;
+      }
+
       final formQas = [
         _asMateriauxTI[_currentMateriauxTI],
         _asFisaFise[_currentFisaFise],
         _asTenteESIR[_currentTenteESIR],
         _asRicard[_currentRicard],
-        _asYourPartyType[_currentYourPartyType],
-        _asBestSunday[_currentBestSunday],
-        _asDifficultSitaution[_currentDifficultSituation],
+        IsFormQA(_qYourPartyType, yourPartyTypeAnswers.toString().replaceFirst(", ", ""), yourPartyTypeScore),
+        IsFormQA(_qBestSunday, bestSundayAnswers.toString().replaceFirst(", ", ""), bestSundayScore),
+        IsFormQA(_qDifficultSituation, difficultSituationAnswers.toString().replaceFirst(", ", ""), difficultSituationScore),
         _asIntroExtraVerti[_currentIntroExtraVerti],
         _asAdventurer[_currentAdventurer],
         _asMoney[_currentMoney],
