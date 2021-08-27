@@ -23,9 +23,8 @@ class SoloChallenge {
     required this.numberOfRepetitions,
     required this.startingDate,
     required this.endingDate,
-  }) {
-    challengeImage = IsImage("");
-  }
+    required this.challengeImage
+  });
 
   SoloChallenge.fromMap(Map<String, dynamic> map) : 
     id = map['id'] as String,

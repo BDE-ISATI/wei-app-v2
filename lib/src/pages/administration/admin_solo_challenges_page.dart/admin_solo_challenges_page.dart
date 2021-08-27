@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:isati_integration/models/is_image.dart';
 import 'package:isati_integration/models/solo_challenge.dart';
 import 'package:isati_integration/src/pages/administration/admin_solo_challenges_page.dart/solo_challenge_edit_page/solo_challenge_edit_page.dart';
 import 'package:isati_integration/src/providers/app_user_store.dart';
@@ -112,7 +113,8 @@ class AdminSoloChallengesPage extends StatelessWidget {
               value: 0,
               numberOfRepetitions: 0,
               startingDate: DateTime.now(),
-              endingDate: DateTime.now().add(const Duration(days: 7))
+              endingDate: DateTime.now().add(const Duration(days: 7)),
+              challengeImage: IsImage("")
             )
           ),
           builder: (context, child) => SoloChallengeEditPage(),

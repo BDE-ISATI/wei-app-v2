@@ -20,7 +20,7 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  int _currentIndex = 0;
+  int _currentIndex = 1;
 
   bool _isMenuBarMinimified = false;
 
@@ -79,7 +79,10 @@ class _MainPageState extends State<MainPage> {
     );
   }
 
-  void _selectedPage(PageItem pageItem) {
+  Future _selectedPage(PageItem pageItem) async {
+    // TODO: temp workaround for provider dispose issue
+    AppManager.instance.popToFirstRoute(context);
+    await Future<void>.delayed(const Duration(milliseconds: 300));
     setState(() {
       _currentIndex = pageItem.index;
     });

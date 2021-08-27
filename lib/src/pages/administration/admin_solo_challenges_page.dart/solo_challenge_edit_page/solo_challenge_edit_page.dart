@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:isati_integration/models/is_image.dart';
 import 'package:isati_integration/models/solo_challenge.dart';
 import 'package:isati_integration/services/solo_challenges_service.dart';
 import 'package:isati_integration/src/providers/app_user_store.dart';
@@ -234,7 +235,8 @@ class _SoloChallengeEditPageState extends State<SoloChallengeEditPage> {
             value: soloChallengeStore.value,
             numberOfRepetitions: soloChallengeStore.numberOfRepetitions,
             startingDate: soloChallengeStore.startingDate,
-            endingDate: soloChallengeStore.endingDate 
+            endingDate: soloChallengeStore.endingDate ,
+            challengeImage: IsImage("", image: soloChallengeStore.challenge.challengeImage.image)
           )
         );
       }

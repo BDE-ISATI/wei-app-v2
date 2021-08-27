@@ -22,6 +22,45 @@ class AppManager {
   final GlobalKey<NavigatorState> teamChallengesKey = GlobalKey<NavigatorState>();
   final GlobalKey<NavigatorState> profileKey = GlobalKey<NavigatorState>();
 
+  // To avoid providders issue we need this
+  void popToFirstRoute(BuildContext context) {
+    if (playerSoloChallengesKey.currentState != null) {
+      playerSoloChallengesKey.currentState!.popUntil((route) => route.isFirst);
+    }
+
+    if (adminSoloChallengesKey.currentState != null) {
+      adminSoloChallengesKey.currentState!.popUntil((route) => route.isFirst);
+    }
+
+    if (adminTeamsKey.currentState != null) {
+      adminTeamsKey.currentState!.popUntil((route) => route.isFirst);
+    }
+
+    if (adminTeamChallengesKey.currentState != null) {
+      adminTeamChallengesKey.currentState!.popUntil((route) => route.isFirst);
+    }
+
+    if (adminUsersKey.currentState != null) {
+      adminUsersKey.currentState!.popUntil((route) => route.isFirst);
+    }
+
+    if (adminFormsKey.currentState != null) {
+      adminFormsKey.currentState!.popUntil((route) => route.isFirst);
+    }
+
+    if (soloWaitingValidationsKey.currentState != null) {
+      soloWaitingValidationsKey.currentState!.popUntil((route) => route.isFirst);
+    }
+
+    if (teamChallengesKey.currentState != null) {
+      teamChallengesKey.currentState!.popUntil((route) => route.isFirst);
+    }
+
+    if (profileKey.currentState != null) {
+      profileKey.currentState!.popUntil((route) => route.isFirst);
+    }
+  }
+
   // Because we are calling this from the main widget we have to check
   // nested navigators status.
   Future<bool?> showCloseAppConfirmation(BuildContext context) {
