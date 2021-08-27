@@ -1,6 +1,9 @@
 import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:isati_integration/services/solo_validations_service.dart';
@@ -11,6 +14,7 @@ import 'package:isati_integration/src/providers/solo_challenge_store.dart';
 import 'package:isati_integration/src/shared/widgets/general/is_app_bar.dart';
 import 'package:isati_integration/src/shared/widgets/general/is_button.dart';
 import 'package:isati_integration/src/shared/widgets/general/is_status_message.dart';
+import 'package:isati_integration/utils/image_compresser/is_image_compress.dart';
 import 'package:isati_integration/utils/screen_utils.dart';
 import 'package:provider/provider.dart';
 
@@ -105,15 +109,28 @@ class _SubmitSoloChallengePageState extends State<SubmitSoloChallengePage> {
     );
 
     if (result != null) {
-      final filesBytes = result.files.map((file) => file.bytes).toList();
+      final List<Uint8List?> filesBytes = [];
+      
+      if (kIsWeb) {
+        filesBytes.addAll(result.files.map((file) => file.bytes).toList());
+      }
+      else {
+        final List<File> files = result.paths.map((path) => File(path!)).toList();
+
+        for (final file in files) {
+          final bytes = await file.readAsBytes();
+          filesBytes.add(bytes);
+        }
+      }
 
       for (final file in filesBytes) {
         if (file == null) {
           continue;
         }
 
-        final String bytes = base64Encode(file);
-        _medias.add(bytes);
+        final compressedBytes = await IsImageCompress.instance.compress(file);
+        
+        _medias.add(base64Encode(compressedBytes));
       }
     }
 

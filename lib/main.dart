@@ -116,31 +116,7 @@ class MyApp extends StatelessWidget {
                   colorPrimary = loggedUser.team!.teamColor.toColor();
                 }
 
-                // We return a future builder to make sure the 
-                // user sees splash screen with his team color
-                return Theme(
-                  data: Theme.of(context).copyWith(
-                    colorScheme:  ColorScheme(
-                    brightness: Brightness.light,
-                    primary: colorPrimary,
-                    primaryVariant: colorPrimaryVariant,
-                    onPrimary: colorWhite,
-                    secondary: colorSecondary,
-                    secondaryVariant: colorSecondaryVariant,
-                    onSecondary: colorWhite,
-                    background: colorScaffolddWhite,
-                    onBackground: colorBlack,
-                    error: colorError,
-                    onError: colorWhite,
-                    surface: colorScaffolddWhite,
-                    onSurface: colorBlack
-                  ),
-                  ),
-                  child: FutureBuilder(
-                    future: Future<void>.delayed(const Duration(seconds: 2)),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.done) {
-                        if (loggedUser.role == UserRoles.player) {
+                if (loggedUser.role == UserRoles.player) {
                           return SafeArea(child: PlayerMainPage());
                         }
                         else if (loggedUser.role == UserRoles.captain) {
@@ -152,12 +128,49 @@ class MyApp extends StatelessWidget {
                         else {
                           Provider.of<AppUserStore>(context, listen: false).logout();
                         }
-                      }
+
+                // We return a future builder to make sure the 
+                // // user sees splash screen with his team color
+                // return Theme(
+                //   data: Theme.of(context).copyWith(
+                //     colorScheme:  ColorScheme(
+                //     brightness: Brightness.light,
+                //     primary: colorPrimary,
+                //     primaryVariant: colorPrimaryVariant,
+                //     onPrimary: colorWhite,
+                //     secondary: colorSecondary,
+                //     secondaryVariant: colorSecondaryVariant,
+                //     onSecondary: colorWhite,
+                //     background: colorScaffolddWhite,
+                //     onBackground: colorBlack,
+                //     error: colorError,
+                //     onError: colorWhite,
+                //     surface: colorScaffolddWhite,
+                //     onSurface: colorBlack
+                //   ),
+                //   ),
+                //   child: FutureBuilder(
+                //     future: Future<void>.delayed(const Duration(seconds: 2)),
+                //     builder: (context, snapshot) {
+                //       if (snapshot.connectionState == ConnectionState.done) {
+                //         if (loggedUser.role == UserRoles.player) {
+                //           return SafeArea(child: PlayerMainPage());
+                //         }
+                //         else if (loggedUser.role == UserRoles.captain) {
+                //           return SafeArea(child: CaptainMainPage());
+                //         }
+                //         else if (loggedUser.role == UserRoles.admin) {
+                //           return SafeArea(child: AdminMainPage());
+                //         }
+                //         else {
+                //           Provider.of<AppUserStore>(context, listen: false).logout();
+                //         }
+                //       }
                 
-                      return SplashScreen();
-                    },
-                  ),
-                );
+                //       return SplashScreen();
+                //     },
+                //   ),
+                // );
               }
 
               return SplashScreen();

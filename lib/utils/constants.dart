@@ -1,1 +1,1 @@
-const kApiBaseUrl = "https://api.integration.isati.org/v1";
+const kApiBaseUrl = "https://isatiintegration-api.conveyor.cloud/v1";
