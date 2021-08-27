@@ -48,7 +48,7 @@ class AuthenticationService {
         HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8",
       },
       body: jsonEncode(<String, String> {
-        "email": username,
+        "email": username.trim(),
         "password": password
       })
     );

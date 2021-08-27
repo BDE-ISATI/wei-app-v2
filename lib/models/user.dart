@@ -66,7 +66,7 @@ class User {
       "teamId": team != null ? team!.id : null,
       "firstName": firstName,
       "lastName": lastName,
-      "email": email,
+      "email": email.trim(),
       "role": role,
       "score": score,
     };
