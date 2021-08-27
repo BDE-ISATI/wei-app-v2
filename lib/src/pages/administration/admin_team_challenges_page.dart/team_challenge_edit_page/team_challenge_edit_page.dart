@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:isati_integration/models/is_image.dart';
 import 'package:isati_integration/models/team_challenge.dart';
 import 'package:isati_integration/services/team_challenges_service.dart';
 import 'package:isati_integration/src/providers/app_user_store.dart';
@@ -250,7 +251,8 @@ class _TeamChallengeEditPageState extends State<TeamChallengeEditPage> {
             shouldCountMembers: teamChallengeStore.shouldCountMembers,
             numberOfRepetitions: teamChallengeStore.numberOfRepetitions,
             startingDate: teamChallengeStore.startingDate,
-            endingDate: teamChallengeStore.endingDate 
+            endingDate: teamChallengeStore.endingDate ,
+            challengeImage: IsImage("", image: teamChallengeStore.challenge.challengeImage.image)
           )
         );
       }

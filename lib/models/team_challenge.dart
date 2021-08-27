@@ -25,9 +25,8 @@ class TeamChallenge {
     required this.shouldCountMembers,
     required this.startingDate,
     required this.endingDate,
-  }) {
-    challengeImage = IsImage("");
-  }
+    required this.challengeImage,
+  });
 
   TeamChallenge.fromMap(Map<String, dynamic> map) : 
     id = map['id'] as String,
