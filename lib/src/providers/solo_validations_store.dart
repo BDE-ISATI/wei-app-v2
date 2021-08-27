@@ -6,8 +6,14 @@ import 'package:isati_integration/src/providers/solo_challenges_store.dart';
 class SoloValidationsStore with ChangeNotifier {
   List<SoloValidation>? _validations;
 
-  Future<List<SoloValidation>> getValidations(String authorization) async {
-    return _validations ??= await SoloValidationsService.instance.getValidations(authorization);
+  Future<List<SoloValidation>> getValidations(String authorization, {bool forceRefresh = false}) async {
+    if (forceRefresh) {
+      _validations = null;
+    }
+
+    _validations ??= await SoloValidationsService.instance.getValidations(authorization);
+
+    return _validations!;
   } 
 
   List<SoloValidation> get validations => _validations!;

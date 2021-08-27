@@ -200,7 +200,9 @@ class _UserEditProfilePageState extends State<UserEditProfilePage> {
                           },
                           label: "Equipe de l'utilisateur",
                           onChanged: (value) {
-                            _teamId = value ?? "";
+                            setState(() {
+                              _teamId = value ?? "";
+                            });
                           },
                         )
                       },

@@ -1,6 +1,9 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:isati_integration/models/user.dart';
 import 'package:isati_integration/services/authentication_service.dart';
+import 'package:isati_integration/services/users_service.dart';
 import 'package:isati_integration/utils/colors.dart';
 
 class AppUserStore with ChangeNotifier {
@@ -23,6 +26,21 @@ class AppUserStore with ChangeNotifier {
     }
 
     return _user;
+  }
+
+  Future refresh({bool shouldNotify = false}) async {
+    try {
+      final newUser = await UsersService.instance.getUser(id!, authorization: authenticationHeader);
+      newUser.token = _user!.token;
+
+      _user = newUser;
+
+      if (shouldNotify) {
+        notifyListeners();
+      }
+    } on Exception {
+      log("error refreshing the user");
+    }
   }
 
   void loginUser(User loggedUser) {

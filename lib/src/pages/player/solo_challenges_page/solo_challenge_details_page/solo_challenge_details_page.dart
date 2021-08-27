@@ -133,7 +133,7 @@ class SoloChallengeDetailsPage extends StatelessWidget {
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(8.0),
-        child: IsImageWidget(source: challenge.challengeImage,)
+        child: IsImageWidget(source: challenge.challengeImage, fit: BoxFit.cover,)
       )
     );
   }
