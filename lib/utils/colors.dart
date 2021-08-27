@@ -1,5 +1,31 @@
 import 'package:flutter/material.dart';
 
+MaterialColor colorSwatch(int value) {
+  final color50 = Color(value).withOpacity(0.1);
+  final color100 = Color(value).withOpacity(0.2);
+  final color200 = Color(value).withOpacity(0.3);
+  final color300 = Color(value).withOpacity(0.4);
+  final color400 = Color(value).withOpacity(0.5);
+  final color500 = Color(value).withOpacity(0.6);
+  final color600 = Color(value).withOpacity(0.7);
+  final color700 = Color(value).withOpacity(0.8);
+  final color800 = Color(value).withOpacity(0.8);
+  final color900 = Color(value).withOpacity(1);
+
+  return MaterialColor(value, <int, Color>{
+    50:color50,
+    100:color100,
+    200:color200,
+    300:color300,
+    400:color400,
+    500:color500,
+    600:color600,
+    700:color700,
+    800:color800,
+    900:color900,
+  });
+}
+
 Color colorPrimary = const Color(0xfff70c35);
 const Color colorPrimaryVariant = Color(0xffaa0824);
 const Color colorSecondary = Color(0xff5caad5);

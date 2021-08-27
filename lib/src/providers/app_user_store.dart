@@ -1,17 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:isati_integration/models/user.dart';
 import 'package:isati_integration/services/authentication_service.dart';
+import 'package:isati_integration/utils/colors.dart';
 
 class AppUserStore with ChangeNotifier {
   User? _user;
 
   Future<User?> get loggedUser async {
+    final shouldShowSplashScreenAgain = _user == null;
+
     await Future<void>.delayed(const Duration(seconds: 2));
-    return _user ??= await AuthenticationService.instance.getLoggedUser();
+    _user ??= await AuthenticationService.instance.getLoggedUser();
+
+    if (_user != null) {
+      if (_user!.team != null) {
+        colorPrimary = _user!.team!.teamColor.toColor();
+      }
+
+      if (shouldShowSplashScreenAgain) {
+        notifyListeners();
+      }
+    }
+
+    return _user;
   }
 
   void loginUser(User loggedUser) {
     _user = loggedUser;
+
+    if (_user!.team != null) {
+      colorPrimary = _user!.team!.teamColor.toColor();
+    }
 
     notifyListeners();
   }

@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:isati_integration/models/user.dart';
@@ -29,6 +27,12 @@ import 'package:provider/provider.dart';
 
 void main() {
   // HttpOverrides.global = DebugHttpOverrides();
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
+      statusBarColor: colorPrimaryVariant,
+      statusBarBrightness: Brightness.dark,
+    )
+  );
   runApp(MyApp());
 }
 
@@ -50,23 +54,18 @@ class MyApp extends StatelessWidget {
           title: 'Flutter Demo',
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
-            colorScheme:  ColorScheme(
-              brightness: Brightness.light,
-              primary: colorPrimary,
-              primaryVariant: colorPrimaryVariant,
-              onPrimary: colorWhite,
-              secondary: colorSecondary,
-              secondaryVariant: colorSecondaryVariant,
-              onSecondary: colorWhite,
-              background: colorScaffolddWhite,
-              onBackground: colorBlack,
-              error: colorError,
-              onError: colorWhite,
-              surface: colorScaffolddWhite,
-              onSurface: colorBlack
+            colorScheme:  ColorScheme.fromSwatch(
+              primarySwatch: colorSwatch(colorPrimary.value),
+              accentColor: colorSecondary,
+              cardColor: colorScaffolddWhite,
+              backgroundColor: colorScaffoldGrey,
             ),
 
+            primaryColor: colorPrimary,
+            accentColor: colorSecondary,
+
             scaffoldBackgroundColor: colorScaffoldGrey,
+            cardColor: colorScaffolddWhite,
             dividerColor: const Color(0xffefefef),
 
             textTheme: const TextTheme(
@@ -112,65 +111,35 @@ class MyApp extends StatelessWidget {
 
                 final User loggedUser = snapshot.data as User;
 
-                if (loggedUser.team != null) {
-                  colorPrimary = loggedUser.team!.teamColor.toColor();
-                }
+                return Theme(
+                  data: Theme.of(context).copyWith(
+                    colorScheme:  ColorScheme.fromSwatch(
+                      primarySwatch: colorSwatch(colorPrimary.value),
+                      accentColor: colorSecondary,
+                      cardColor: colorScaffolddWhite,
+                      backgroundColor: colorScaffoldGrey,
+                    ),
 
-                if (loggedUser.role == UserRoles.player) {
-                          return SafeArea(child: PlayerMainPage());
-                        }
-                        else if (loggedUser.role == UserRoles.captain) {
-                          return SafeArea(child: CaptainMainPage());
-                        }
-                        else if (loggedUser.role == UserRoles.admin) {
-                          return SafeArea(child: AdminMainPage());
-                        }
-                        else {
-                          Provider.of<AppUserStore>(context, listen: false).logout();
-                        }
+                    primaryColor: colorPrimary,
+                  ),
+                  child: Builder(
+                    builder: (context) {
+                      if (loggedUser.role == UserRoles.player) {
+                        return SafeArea(child: PlayerMainPage());
+                      }
+                      else if (loggedUser.role == UserRoles.captain) {
+                        return SafeArea(child: CaptainMainPage());
+                      }
+                      else if (loggedUser.role == UserRoles.admin) {
+                        return SafeArea(child: AdminMainPage());
+                      }
+                      
+                      Provider.of<AppUserStore>(context, listen: false).logout();
+                      return Container();
+                    },
+                  ),
+                );
 
-                // We return a future builder to make sure the 
-                // // user sees splash screen with his team color
-                // return Theme(
-                //   data: Theme.of(context).copyWith(
-                //     colorScheme:  ColorScheme(
-                //     brightness: Brightness.light,
-                //     primary: colorPrimary,
-                //     primaryVariant: colorPrimaryVariant,
-                //     onPrimary: colorWhite,
-                //     secondary: colorSecondary,
-                //     secondaryVariant: colorSecondaryVariant,
-                //     onSecondary: colorWhite,
-                //     background: colorScaffolddWhite,
-                //     onBackground: colorBlack,
-                //     error: colorError,
-                //     onError: colorWhite,
-                //     surface: colorScaffolddWhite,
-                //     onSurface: colorBlack
-                //   ),
-                //   ),
-                //   child: FutureBuilder(
-                //     future: Future<void>.delayed(const Duration(seconds: 2)),
-                //     builder: (context, snapshot) {
-                //       if (snapshot.connectionState == ConnectionState.done) {
-                //         if (loggedUser.role == UserRoles.player) {
-                //           return SafeArea(child: PlayerMainPage());
-                //         }
-                //         else if (loggedUser.role == UserRoles.captain) {
-                //           return SafeArea(child: CaptainMainPage());
-                //         }
-                //         else if (loggedUser.role == UserRoles.admin) {
-                //           return SafeArea(child: AdminMainPage());
-                //         }
-                //         else {
-                //           Provider.of<AppUserStore>(context, listen: false).logout();
-                //         }
-                //       }
-                
-                //       return SplashScreen();
-                //     },
-                //   ),
-                // );
               }
 
               return SplashScreen();
