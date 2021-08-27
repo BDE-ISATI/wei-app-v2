@@ -79,6 +79,7 @@ class _IsTextInput extends State<IsTextInput> {
                 maxLines: widget.maxLines,
                 decoration: InputDecoration(
                   hintText: widget.hintText,
+                  hintStyle: TextStyle(color: Color(Colors.grey[400]!.value)),
                   enabledBorder: OutlineInputBorder(
                     borderSide: const BorderSide(color: Colors.black12,),
                     borderRadius: BorderRadius.circular(6.0),

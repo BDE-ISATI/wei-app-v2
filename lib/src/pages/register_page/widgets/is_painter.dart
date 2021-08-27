@@ -46,7 +46,7 @@ class _IsPainter extends State<IsPainter> {
             onGenerateRoute: (route) => MaterialPageRoute<void>(
                   builder: (context) => Scaffold(
                     appBar: AppBar(
-                      backgroundColor: colorSecondary,
+                      backgroundColor: Colors.grey,
                         title: Text(widget.title),
                         actions: actions,
                         bottom: PreferredSize(
