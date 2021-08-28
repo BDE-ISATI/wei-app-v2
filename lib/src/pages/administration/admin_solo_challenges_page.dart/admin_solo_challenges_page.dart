@@ -10,13 +10,18 @@ import 'package:isati_integration/src/shared/widgets/solo_challenge_card.dart';
 import 'package:isati_integration/utils/screen_utils.dart';
 import 'package:provider/provider.dart';
 
-class AdminSoloChallengesPage extends StatelessWidget {
+class AdminSoloChallengesPage extends StatefulWidget {
+  @override
+  _AdminSoloChallengesPageState createState() => _AdminSoloChallengesPageState();
+}
+
+class _AdminSoloChallengesPageState extends State<AdminSoloChallengesPage> {
   @override
   Widget build(BuildContext context) {
-    return Consumer2<SoloChallengesStore, AppUserStore>(
-      builder: (context, soloChallengesStore, appUserStore, child) {
+    return Consumer<SoloChallengesStore>(
+      builder: (context, soloChallengesStore, child) {
         return FutureBuilder<void>(
-          future: _loadAppData(soloChallengesStore, appUserStore),
+          future: _loadAppData(),
           builder: (context, snapshot) {
 
             if (snapshot.connectionState == ConnectionState.done) {
@@ -64,31 +69,42 @@ class AdminSoloChallengesPage extends StatelessWidget {
   }
 
   Widget _buildSoloChallengesList({required List<SoloChallenge> soloChallenges}) {
-    return SingleChildScrollView(
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          return Wrap(
-            spacing: 20,
-            runSpacing: 20,
-            children: [
-              for (final soloChallenge in soloChallenges)
-                ChangeNotifierProvider(
-                  create: (context) => SoloChallengeStore(soloChallenge),
-                  builder: (context, child) => SoloChallengeCard(
-                    width: constraints.maxWidth > 500 ? 320 : constraints.maxWidth,
-                    buttonText: "Modifier",
-                    onButtonPressed: () => _onUpateSoloChallengePressed(context, Provider.of<SoloChallengeStore>(context, listen: false)),
-                  ),
-                )
-            ],
-          );
-        },
+    return RefreshIndicator(
+      onRefresh: () => _loadAppData(forceRefresh: true),
+      child: SingleChildScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            return Wrap(
+              spacing: 20,
+              runSpacing: 20,
+              children: [
+                for (final soloChallenge in soloChallenges)
+                  ChangeNotifierProvider(
+                    create: (context) => SoloChallengeStore(soloChallenge),
+                    builder: (context, child) => SoloChallengeCard(
+                      width: constraints.maxWidth > 500 ? 320 : constraints.maxWidth,
+                      buttonText: "Modifier",
+                      onButtonPressed: () => _onUpateSoloChallengePressed(context, Provider.of<SoloChallengeStore>(context, listen: false)),
+                    ),
+                  )
+              ],
+            );
+          },
+        ),
       ),
     );
   }
 
-  Future _loadAppData(SoloChallengesStore soloChallengesStore, AppUserStore appUserStore) async {
-    await soloChallengesStore.getChallenges(appUserStore.authenticationHeader);
+  Future _loadAppData({bool forceRefresh = false}) async {
+    final AppUserStore appUserStore = Provider.of<AppUserStore>(context, listen: false);
+    final SoloChallengesStore soloChallengesStore = Provider.of(context, listen: false);
+
+    await soloChallengesStore.getChallenges(appUserStore.authenticationHeader, forceRefresh: forceRefresh);
+
+    if (forceRefresh) {
+      setState(() {});
+    }
   }
 
   Future _onUpateSoloChallengePressed(BuildContext context, SoloChallengeStore soloChallengeStore) async {

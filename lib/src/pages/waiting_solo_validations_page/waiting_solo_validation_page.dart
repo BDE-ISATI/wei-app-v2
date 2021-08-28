@@ -10,13 +10,18 @@ import 'package:isati_integration/src/shared/widgets/general/is_status_message.d
 import 'package:isati_integration/utils/screen_utils.dart';
 import 'package:provider/provider.dart';
 
-class WaitingSoloValidationsPage extends StatelessWidget {
+class WaitingSoloValidationsPage extends StatefulWidget {
+  @override
+  _WaitingSoloValidationsPageState createState() => _WaitingSoloValidationsPageState();
+}
+
+class _WaitingSoloValidationsPageState extends State<WaitingSoloValidationsPage> {
   @override
   Widget build(BuildContext context) {
-    return Consumer4<SoloValidationsStore, SoloChallengesStore, UsersStore, AppUserStore>(
-      builder: (context, soloValidationsStore, soloChallengesStore, usersStore, appUserStore, child) {
+    return Consumer<SoloValidationsStore>(
+      builder: (context, soloValidationsStore, child) {
         return FutureBuilder<void>(
-          future: _loadAppData(soloChallengesStore, soloValidationsStore, usersStore, appUserStore),
+          future: _loadAppData(),
           builder: (context, snapshot) {
 
             if (snapshot.connectionState == ConnectionState.done) {
@@ -60,30 +65,44 @@ class WaitingSoloValidationsPage extends StatelessWidget {
   }
 
   Widget _buildSoloValidationsList({required List<SoloValidation> validations}) {
-    return SingleChildScrollView(
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          return Wrap(
-            spacing: 20,
-            runSpacing: 20,
-            children: [
-              for (final validation in validations)
-                ChangeNotifierProvider(
-                  create: (context) => SoloValidationStore(validation),
-                  builder: (context, child) => WaitingValidationCard(
-                    width: constraints.maxWidth > 640 ? 320 : constraints.maxWidth,
-                  ),
-                )
-            ],
-          );
-        },
+    return RefreshIndicator(
+      onRefresh: () => _loadAppData(forceRefresh: true),
+      child: SingleChildScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            return Wrap(
+              spacing: 20,
+              runSpacing: 20,
+              children: [
+                for (final validation in validations)
+                  ChangeNotifierProvider(
+                    create: (context) => SoloValidationStore(validation),
+                    builder: (context, child) => WaitingValidationCard(
+                      width: constraints.maxWidth > 640 ? 320 : constraints.maxWidth,
+                    ),
+                  )
+              ],
+            );
+          },
+        ),
       ),
     );
   }
 
-  Future _loadAppData(SoloChallengesStore soloChallengesStore, SoloValidationsStore soloValidationsStore, UsersStore usersStore, AppUserStore appUserStore) async {
-    await soloChallengesStore.getChallenges(appUserStore.authenticationHeader);
-    await soloValidationsStore.getValidations(appUserStore.authenticationHeader);
-    await usersStore.getUsers(appUserStore.authenticationHeader);
+  Future _loadAppData({bool forceRefresh = false}) async {
+    final AppUserStore appUserStore = Provider.of<AppUserStore>(context, listen: false);
+
+    final SoloChallengesStore soloChallengesStore = Provider.of<SoloChallengesStore>(context, listen: false);
+    final SoloValidationsStore soloValidationsStore = Provider.of<SoloValidationsStore>(context, listen: false);
+    final UsersStore usersStore = Provider.of<UsersStore>(context, listen: false);
+
+    await soloChallengesStore.getChallenges(appUserStore.authenticationHeader, forceRefresh: forceRefresh);
+    await soloValidationsStore.getValidations(appUserStore.authenticationHeader, forceRefresh: forceRefresh);
+    await usersStore.getUsers(appUserStore.authenticationHeader, forceRefresh: forceRefresh);
+
+    if (forceRefresh) {
+      setState(() {});
+    }
   }
 }

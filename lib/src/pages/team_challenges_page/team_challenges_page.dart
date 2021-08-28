@@ -11,22 +11,23 @@ import 'package:isati_integration/src/shared/widgets/team_challenge_card.dart';
 import 'package:isati_integration/utils/screen_utils.dart';
 import 'package:provider/provider.dart';
 
-class TeamChallengesPage extends StatelessWidget {
+class TeamChallengesPage extends StatefulWidget {
   const TeamChallengesPage({Key? key}) : super(key: key);
 
   @override
+  _TeamChallengesPageState createState() => _TeamChallengesPageState();
+}
+
+class _TeamChallengesPageState extends State<TeamChallengesPage> {
+  @override
   Widget build(BuildContext context) {
-    return Consumer3<TeamChallengesStore, TeamValidationsStore, AppUserStore>(
-      builder: (context, teamChallengesStore, teamValidationsStore, appUserStore, child) {
+    return Consumer<TeamChallengesStore>(
+      builder: (context, teamChallengesStore, child) {
         return Scaffold(
           body: Padding(
             padding: ScreenUtils.instance.defaultPadding,
             child: FutureBuilder<void>(
-              future: _loadData(
-                teamChallengesStore, 
-                teamValidationsStore, 
-                appUserStore,
-              ),
+              future: _loadData(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.done) {
                   if (snapshot.hasError) {
@@ -62,36 +63,49 @@ class TeamChallengesPage extends StatelessWidget {
   }
 
   Widget _buildChallengesList({required List<TeamChallenge> challenges}) {
-    return SingleChildScrollView(
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          return Wrap(
-            spacing: 20,
-            runSpacing: 20,
-            children: [
-              for (final challenge in challenges)
-                ChangeNotifierProvider(
-                  create: (context) => TeamChallengeStore(challenge),
-                  builder: (context, child) => TeamChallengeCard(
-                    width: constraints.maxWidth > 500 ? 250 : constraints.maxWidth,
-                    showOverlay: true,
-                    buttonText: "Détails",
-                    onButtonPressed: () => _onChallengeDetailsPressed(context, Provider.of<TeamChallengeStore>(context, listen: false))
-                  ),
-                )
-            ],
-          );
-        },
+    return RefreshIndicator(
+      onRefresh: () => _loadData(forceRefresh: true),
+      child: SingleChildScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            return Wrap(
+              spacing: 20,
+              runSpacing: 20,
+              children: [
+                for (final challenge in challenges)
+                  ChangeNotifierProvider(
+                    create: (context) => TeamChallengeStore(challenge),
+                    builder: (context, child) => TeamChallengeCard(
+                      width: constraints.maxWidth > 500 ? 250 : constraints.maxWidth,
+                      showOverlay: true,
+                      buttonText: "Détails",
+                      onButtonPressed: () => _onChallengeDetailsPressed(context, Provider.of<TeamChallengeStore>(context, listen: false))
+                    ),
+                  )
+              ],
+            );
+          },
+        ),
       ),
     );
   }
 
-  Future _loadData(TeamChallengesStore teamChallengesStore, TeamValidationsStore teamValidationsStore, AppUserStore appUserStore) async {
-    await teamChallengesStore.getChallenges(appUserStore.authenticationHeader);
-    await teamValidationsStore.getValidations(appUserStore.authenticationHeader);
+  Future _loadData({bool forceRefresh = false}) async {
+    final AppUserStore appUserStore = Provider.of<AppUserStore>(context, listen: false);
+
+    final TeamChallengesStore teamChallengesStore = Provider.of<TeamChallengesStore>(context, listen: false);
+    final TeamValidationsStore teamValidationsStore = Provider.of<TeamValidationsStore>(context, listen: false);
+
+    await teamChallengesStore.getChallenges(appUserStore.authenticationHeader, forceRefresh: forceRefresh);
+    await teamValidationsStore.getValidations(appUserStore.authenticationHeader, forceRefresh: forceRefresh);
 
     if (appUserStore.user!.role != UserRoles.admin) {
       teamValidationsStore.updateChallenges(teamChallengesStore);
+    }
+
+    if (forceRefresh) {
+      setState(() {});
     }
   }
 

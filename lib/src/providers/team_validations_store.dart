@@ -6,8 +6,14 @@ import 'package:isati_integration/src/providers/team_challenges_store.dart';
 class TeamValidationsStore with ChangeNotifier {
   List<TeamValidation>? _validations;
 
-  Future<List<TeamValidation>> getValidations(String authorization) async {
-    return _validations ??= await TeamValidationsService.instance.getValidations(authorization);
+  Future<List<TeamValidation>> getValidations(String authorization, {bool forceRefresh = false}) async {
+    if (forceRefresh) {
+      _validations = null;
+    }
+
+    _validations ??= await TeamValidationsService.instance.getValidations(authorization);
+
+    return _validations!;
   } 
 
   List<TeamValidation> get validations => _validations!;

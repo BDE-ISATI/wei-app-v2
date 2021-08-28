@@ -10,13 +10,18 @@ import 'package:isati_integration/src/shared/widgets/team_card.dart';
 import 'package:isati_integration/utils/screen_utils.dart';
 import 'package:provider/provider.dart';
 
-class AdminTeamsPage extends StatelessWidget {
+class AdminTeamsPage extends StatefulWidget {
+  @override
+  _AdminTeamsPageState createState() => _AdminTeamsPageState();
+}
+
+class _AdminTeamsPageState extends State<AdminTeamsPage> {
   @override
   Widget build(BuildContext context) {
-    return Consumer3<TeamsStore, UsersStore, AppUserStore>(
-      builder: (context, teamsStore, usersStore, appUserStore, child) {
+    return Consumer<TeamsStore>(
+      builder: (context, teamsStore, child) {
         return FutureBuilder<void>(
-          future: _loadAppData(teamsStore, usersStore, appUserStore),
+          future: _loadAppData(),
           builder: (context, snapshot) {
 
             if (snapshot.connectionState == ConnectionState.done) {
@@ -64,32 +69,45 @@ class AdminTeamsPage extends StatelessWidget {
   }
 
   Widget _buildTeamsList({required List<Team> teams}) {
-    return SingleChildScrollView(
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          return Wrap(
-            spacing: 20,
-            runSpacing: 20,
-            children: [
-              for (final team in teams)
-                ChangeNotifierProvider(
-                  create: (context) => TeamStore(team),
-                  builder: (context, child) => TeamCard(
-                    width: constraints.maxWidth > 500 ? 320 : constraints.maxWidth,
-                    buttonText: "Modifier",
-                    onButtonPressed: () => _onUpateTeamPressed(context, Provider.of<TeamStore>(context, listen: false)),
-                  ),
-                )
-            ],
-          );
-        },
+    return RefreshIndicator(
+      onRefresh: () => _loadAppData(forceRefresh: true),
+      child: SingleChildScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            return Wrap(
+              spacing: 20,
+              runSpacing: 20,
+              children: [
+                for (final team in teams)
+                  ChangeNotifierProvider(
+                    create: (context) => TeamStore(team),
+                    builder: (context, child) => TeamCard(
+                      width: constraints.maxWidth > 500 ? 320 : constraints.maxWidth,
+                      buttonText: "Modifier",
+                      onButtonPressed: () => _onUpateTeamPressed(context, Provider.of<TeamStore>(context, listen: false)),
+                    ),
+                  )
+              ],
+            );
+          },
+        ),
       ),
     );
   }
 
-  Future _loadAppData(TeamsStore teamsStore, UsersStore usersStore, AppUserStore appUserStore) async {
-    await teamsStore.getTeams(appUserStore.authenticationHeader);
-    await usersStore.getUsers(appUserStore.authenticationHeader);
+  Future _loadAppData({bool forceRefresh = false}) async {
+    final UsersStore usersStore = Provider.of<UsersStore>(context, listen: false);
+    final TeamsStore teamsStore = Provider.of<TeamsStore>(context, listen: false);
+
+    final AppUserStore appUserStore = Provider.of<AppUserStore>(context, listen: false);
+
+    await usersStore.getUsers(appUserStore.authenticationHeader, forceRefresh: forceRefresh);
+    await teamsStore.getTeams(appUserStore.authenticationHeader, forceRefresh: forceRefresh);
+
+    if (forceRefresh) {
+      setState(() {});
+    }
   }
 
   Future _onUpateTeamPressed(BuildContext context, TeamStore teamStore) async {

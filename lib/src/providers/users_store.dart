@@ -5,7 +5,11 @@ import 'package:isati_integration/services/users_service.dart';
 class UsersStore with ChangeNotifier {
   Map<String, User>? _users;
 
-  Future<List<User>> getUsers(String authorization) async {
+  Future<List<User>> getUsers(String authorization, {bool forceRefresh = false}) async {
+    if (forceRefresh) {
+      _users = null;
+    }    
+
     _users ??= await UsersService.instance.getUsers(authorization);
 
     return _users!.values.toList();

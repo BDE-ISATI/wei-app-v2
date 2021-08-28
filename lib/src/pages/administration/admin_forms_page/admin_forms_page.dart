@@ -42,10 +42,10 @@ class _AdminFormsPageState extends State<AdminFormsPage> {
           ),
           const SizedBox(height: 20,),
           Expanded(
-            child: Consumer3<TeamsStore, UsersStore, AppUserStore>(
-              builder: (context, teamsStore, usersStore, appUserStore, child) {
+            child: Consumer<UsersStore>(
+              builder: (context, usersStore, child) {
                 return  FutureBuilder<void>(
-                    future: _loadAppData(usersStore, teamsStore, appUserStore),
+                    future: _loadAppData(),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.done) {
                         if (snapshot.hasError) {
@@ -82,33 +82,46 @@ class _AdminFormsPageState extends State<AdminFormsPage> {
   }
 
   Widget _buildUsersList({required List<User> users}) {
-    return SingleChildScrollView(
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          return Wrap(
-            spacing: 20,
-            runSpacing: 20,
-            children: [
-              for (final user in users)
-                if (_usreNameFilter.isEmpty || user.fullName.toLowerCase().contains(_usreNameFilter.toLowerCase()))
-                  ChangeNotifierProvider(
-                    create: (context) => UserStore(user),
-                    builder: (context, child) => UserCard(
-                      width: constraints.maxWidth > 500 ? 320 : constraints.maxWidth,
-                      buttonText: "Voir le formulaire",
-                      onButtonPressed: () => _onUpateUserPressed(context, Provider.of<UserStore>(context, listen: false)),
-                    ),
-                )
-            ],
-          );
-        },
+    return RefreshIndicator(
+      onRefresh: () => _loadAppData(forceRefresh: true),
+      child: SingleChildScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            return Wrap(
+              spacing: 20,
+              runSpacing: 20,
+              children: [
+                for (final user in users)
+                  if (_usreNameFilter.isEmpty || user.fullName.toLowerCase().contains(_usreNameFilter.toLowerCase()))
+                    ChangeNotifierProvider(
+                      create: (context) => UserStore(user),
+                      builder: (context, child) => UserCard(
+                        width: constraints.maxWidth > 500 ? 320 : constraints.maxWidth,
+                        buttonText: "Voir le formulaire",
+                        onButtonPressed: () => _onUpateUserPressed(context, Provider.of<UserStore>(context, listen: false)),
+                      ),
+                  )
+              ],
+            );
+          },
+        ),
       ),
     );
   }
 
-  Future _loadAppData(UsersStore usersStore, TeamsStore teamsStore, AppUserStore appUserStore) async {
-    await usersStore.getUsers(appUserStore.authenticationHeader);
-    await teamsStore.getTeams(appUserStore.authenticationHeader);
+  Future _loadAppData({bool forceRefresh = false}) async {
+    final UsersStore usersStore = Provider.of<UsersStore>(context, listen: false);
+    final TeamsStore teamsStore = Provider.of<TeamsStore>(context, listen: false);
+
+    final AppUserStore appUserStore = Provider.of<AppUserStore>(context, listen: false);
+
+    await usersStore.getUsers(appUserStore.authenticationHeader, forceRefresh: forceRefresh);
+    await teamsStore.getTeams(appUserStore.authenticationHeader, forceRefresh: forceRefresh);
+
+    if (forceRefresh) {
+      setState(() {});
+    }
   }
 
   Future _onUpateUserPressed(BuildContext context, UserStore userStore) async {

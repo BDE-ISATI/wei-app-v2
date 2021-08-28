@@ -10,22 +10,23 @@ import 'package:isati_integration/src/shared/widgets/solo_challenge_card.dart';
 import 'package:isati_integration/utils/screen_utils.dart';
 import 'package:provider/provider.dart';
 
-class SoloChallengesPage extends StatelessWidget {
+class SoloChallengesPage extends StatefulWidget {
   const SoloChallengesPage({Key? key}) : super(key: key);
 
   @override
+  _SoloChallengesPageState createState() => _SoloChallengesPageState();
+}
+
+class _SoloChallengesPageState extends State<SoloChallengesPage> {
+  @override
   Widget build(BuildContext context) {
-    return Consumer3<SoloChallengesStore, SoloValidationsStore, AppUserStore>(
-      builder: (context, soloChallengesStore, soloValidationsStore, appUserStore, child) {
+    return Consumer<SoloChallengesStore>(
+      builder: (context, soloChallengesStore, child) {
         return Scaffold(
           body: Padding(
             padding: ScreenUtils.instance.defaultPadding,
             child: FutureBuilder<void>(
-              future: _loadData(
-                soloChallengesStore, 
-                soloValidationsStore, 
-                authorization: appUserStore.authenticationHeader
-              ),
+              future: _loadData(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.done) {
                   if (snapshot.hasError) {
@@ -62,35 +63,48 @@ class SoloChallengesPage extends StatelessWidget {
   }
 
   Widget _buildChallengesList({required List<SoloChallenge> challenges}) {
-    return SingleChildScrollView(
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          return Wrap(
-            spacing: 20,
-            runSpacing: 20,
-            children: [
-              for (final challenge in challenges)
-                ChangeNotifierProvider(
-                  create: (context) => SoloChallengeStore(challenge),
-                  builder: (context, child) => SoloChallengeCard(
-                    width: constraints.maxWidth > 500 ? 250 : constraints.maxWidth,
-                    showOverlay: true,
-                    buttonText: "Détails",
-                    onButtonPressed: () => _onChallengeDetailsPressed(context, Provider.of<SoloChallengeStore>(context, listen: false))
-                  ),
-                )
-            ],
-          );
-        },
+    return RefreshIndicator(
+      onRefresh: () => _loadData(forceRefresh: true),
+      child: SingleChildScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            return Wrap(
+              spacing: 20,
+              runSpacing: 20,
+              children: [
+                for (final challenge in challenges)
+                  ChangeNotifierProvider(
+                    create: (context) => SoloChallengeStore(challenge),
+                    builder: (context, child) => SoloChallengeCard(
+                      width: constraints.maxWidth > 500 ? 250 : constraints.maxWidth,
+                      showOverlay: true,
+                      buttonText: "Détails",
+                      onButtonPressed: () => _onChallengeDetailsPressed(context, Provider.of<SoloChallengeStore>(context, listen: false))
+                    ),
+                  )
+              ],
+            );
+          },
+        ),
       ),
     );
   }
 
-  Future _loadData(SoloChallengesStore soloChallengesStore, SoloValidationsStore soloValidationsStore, {required String authorization}) async {
-    await soloChallengesStore.getChallenges(authorization);
-    await soloValidationsStore.getValidations(authorization);
+  Future _loadData({bool forceRefresh = false}) async {
+    final AppUserStore appUserStore = Provider.of<AppUserStore>(context, listen: false);
+
+    final SoloChallengesStore soloChallengesStore = Provider.of<SoloChallengesStore>(context, listen: false);
+    final SoloValidationsStore soloValidationsStore = Provider.of<SoloValidationsStore>(context, listen: false);
+
+    await soloChallengesStore.getChallenges(appUserStore.authenticationHeader, forceRefresh: forceRefresh);
+    await soloValidationsStore.getValidations(appUserStore.authenticationHeader, forceRefresh: forceRefresh);
 
     soloValidationsStore.updateChallenges(soloChallengesStore);
+
+    if (forceRefresh) {
+      setState(() {});
+    }
   }
 
   Future _onChallengeDetailsPressed(BuildContext context, SoloChallengeStore soloChallengeStore) async {

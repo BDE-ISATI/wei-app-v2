@@ -10,13 +10,18 @@ import 'package:isati_integration/src/shared/widgets/team_challenge_card.dart';
 import 'package:isati_integration/utils/screen_utils.dart';
 import 'package:provider/provider.dart';
 
-class AdminTeamChallengesPage extends StatelessWidget {
+class AdminTeamChallengesPage extends StatefulWidget {
+  @override
+  _AdminTeamChallengesPageState createState() => _AdminTeamChallengesPageState();
+}
+
+class _AdminTeamChallengesPageState extends State<AdminTeamChallengesPage> {
   @override
   Widget build(BuildContext context) {
-    return Consumer2<TeamChallengesStore, AppUserStore>(
-      builder: (context, teamChallengesStore, appUserStore, child) {
+    return Consumer<TeamChallengesStore>(
+      builder: (context, teamChallengesStore, child) {
         return FutureBuilder<void>(
-          future: _loadAppData(teamChallengesStore, appUserStore),
+          future: _loadAppData(),
           builder: (context, snapshot) {
 
             if (snapshot.connectionState == ConnectionState.done) {
@@ -64,31 +69,42 @@ class AdminTeamChallengesPage extends StatelessWidget {
   }
 
   Widget _buildTeamChallengesList({required List<TeamChallenge> teamChallenges}) {
-    return SingleChildScrollView(
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          return Wrap(
-            spacing: 20,
-            runSpacing: 20,
-            children: [
-              for (final teamChallenge in teamChallenges)
-                ChangeNotifierProvider(
-                  create: (context) => TeamChallengeStore(teamChallenge),
-                  builder: (context, child) => TeamChallengeCard(
-                    width: constraints.maxWidth > 500 ? 320 : constraints.maxWidth,
-                    buttonText: "Modifier",
-                    onButtonPressed: () => _onUpateTeamChallengePressed(context, Provider.of<TeamChallengeStore>(context, listen: false)),
-                  ),
-                )
-            ],
-          );
-        },
+    return RefreshIndicator(
+      onRefresh: () => _loadAppData(forceRefresh: true),
+      child: SingleChildScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            return Wrap(
+              spacing: 20,
+              runSpacing: 20,
+              children: [
+                for (final teamChallenge in teamChallenges)
+                  ChangeNotifierProvider(
+                    create: (context) => TeamChallengeStore(teamChallenge),
+                    builder: (context, child) => TeamChallengeCard(
+                      width: constraints.maxWidth > 500 ? 320 : constraints.maxWidth,
+                      buttonText: "Modifier",
+                      onButtonPressed: () => _onUpateTeamChallengePressed(context, Provider.of<TeamChallengeStore>(context, listen: false)),
+                    ),
+                  )
+              ],
+            );
+          },
+        ),
       ),
     );
   }
 
-  Future _loadAppData(TeamChallengesStore teamChallengesStore, AppUserStore appUserStore) async {
-    await teamChallengesStore.getChallenges(appUserStore.authenticationHeader);
+  Future _loadAppData({bool forceRefresh = false}) async {
+    final AppUserStore appUserStore = Provider.of<AppUserStore>(context, listen: false);
+    final TeamChallengesStore teamChallengesStore = Provider.of<TeamChallengesStore>(context, listen: false);
+
+    await teamChallengesStore.getChallenges(appUserStore.authenticationHeader, forceRefresh: forceRefresh);
+
+    if (forceRefresh) {
+      setState(() {});
+    }
   }
 
   Future _onUpateTeamChallengePressed(BuildContext context, TeamChallengeStore teamChallengeStore) async {
