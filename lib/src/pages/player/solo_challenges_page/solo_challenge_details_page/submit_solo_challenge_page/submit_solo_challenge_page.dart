@@ -17,6 +17,7 @@ import 'package:isati_integration/src/shared/widgets/general/is_status_message.d
 import 'package:isati_integration/utils/image_compresser/is_image_compress.dart';
 import 'package:isati_integration/utils/screen_utils.dart';
 import 'package:provider/provider.dart';
+import 'package:video_compress/video_compress.dart';
 
 class SubmitSoloChallengePage extends StatefulWidget {
   @override
@@ -105,32 +106,26 @@ class _SubmitSoloChallengePageState extends State<SubmitSoloChallengePage> {
 
     final FilePickerResult? result = await FilePicker.platform.pickFiles(
       allowMultiple: true,
-      type: FileType.image
+      type: FileType.media
     );
 
     if (result != null) {
-      final List<Uint8List?> filesBytes = [];
-      
-      if (kIsWeb) {
-        filesBytes.addAll(result.files.map((file) => file.bytes).toList());
-      }
-      else {
-        final List<File> files = result.paths.map((path) => File(path!)).toList();
+      final Set<String> videosType = { "webm","wmv","mpeg","mkv","mp4","avi","mov","flv" };
 
-        for (final file in files) {
-          final bytes = await file.readAsBytes();
-          filesBytes.add(bytes);
+      for (final file in result.files) {
+        if (videosType.contains(file.extension)) {
+          final bytes = await _processVideo(file);
+
+          if (bytes == null) {
+            continue;
+          }
+
+          _medias.add(base64Encode(utf8.encode("type=video") + bytes));
         }
-      }
-
-      for (final file in filesBytes) {
-        if (file == null) {
-          continue;
+        else {
+          final bytes = await _processImage(file);
+          _medias.add(base64Encode(bytes));
         }
-
-        final compressedBytes = await IsImageCompress.instance.compress(file);
-        
-        _medias.add(base64Encode(compressedBytes));
       }
     }
 
@@ -138,6 +133,57 @@ class _SubmitSoloChallengePageState extends State<SubmitSoloChallengePage> {
       _isFileLoading = false;
       _isHttpLoading = false;
     });
+  }
+
+  Future<Uint8List?> _processVideo(PlatformFile platformFile) async {
+    Uint8List? fileBytes;
+
+    if (kIsWeb) {
+      if (platformFile.size > 60*1024*1024) {
+        await showDialog<void>(
+          context: context, 
+          builder: (context) => AlertDialog(
+            title: const Text("Impossible d'importer cette vidéo"),
+            content: const Text("Vous ne pouvez pas importer cette vidéo car elle est trop lourde. Essayer de réduire sa "
+                                "taill en ligne avec des outils comme https://www.freeconvert.com/video-compressor"),
+            actions: [
+              InkWell(
+                onTap: () { Navigator.of(context).pop(); },
+                child: const Text("Ok"),
+              )
+            ],
+          )
+        );
+
+        return null;
+      }
+
+      fileBytes = platformFile.bytes;
+    }
+    else {
+      final File file = File(platformFile.path!);
+      
+      final MediaInfo? mediaInfo = await VideoCompress.compressVideo(
+        file.path, 
+      );
+
+      fileBytes = await mediaInfo!.file!.readAsBytes();
+    }
+
+    return fileBytes!;
+  }
+
+  Future<Uint8List> _processImage(PlatformFile platformFile) async {
+    Uint8List? fileBytes;
+    if (kIsWeb) {
+      fileBytes = platformFile.bytes;
+    }
+    else {
+      final File file = File(platformFile.path!);
+      fileBytes = await file.readAsBytes();
+    }
+
+    return IsImageCompress.instance.compress(fileBytes!);
   }
 
   Future _onSubmitProofs() async {

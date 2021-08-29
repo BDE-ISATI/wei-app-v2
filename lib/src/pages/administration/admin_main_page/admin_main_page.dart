@@ -90,8 +90,8 @@ final List<Widget> pages = [
     ),
     PageItem(
       index: 2,
-      title: "Les défis solo d'équipe",
-      icon: Icons.pool
+      title: "Les défis d'équipe",
+      icon: Icons.people
     ),
     PageItem(
       index: 3,
