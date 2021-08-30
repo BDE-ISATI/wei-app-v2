@@ -51,6 +51,10 @@ class _RegisterPageState extends State<RegisterPage> {
   final List<IsFormQA> _asFisaFise = [];
   int _currentFisaFise = 0;
 
+  final String _qPassSanitaire = "Possèdes tu le passe sanitaire ?";
+  final List<IsFormQA> _asPassSanitaire = [];
+  int _currentPassSanitaire = 0;
+
   final String _qTenteESIR = "Serais-tu prêt.e à dormir dans une tente devant l’ESIR ?";
   final List<IsFormQA> _asTenteESIR = [];
   int _currentTenteESIR = 0;
@@ -149,6 +153,13 @@ class _RegisterPageState extends State<RegisterPage> {
     _asFisaFise.addAll([
       IsFormQA(_qFisaFise, "FISE", 0),
       IsFormQA(_qFisaFise, "FISA", 0),
+    ]);
+
+    _asPassSanitaire.addAll([
+      IsFormQA(_qPassSanitaire, "Oui", 0),
+      IsFormQA(_qPassSanitaire, "Dans moins d'une semaines", 0),
+      IsFormQA(_qPassSanitaire, "Dans moins de deux semaines", 0),
+      IsFormQA(_qPassSanitaire, "Non", 0),
     ]);
 
     _asTenteESIR.addAll([
@@ -432,6 +443,21 @@ class _RegisterPageState extends State<RegisterPage> {
           onChanged: (value) {
             setState(() {
               _currentFisaFise = value ?? 0;
+            });
+          },
+        ),
+        const SizedBox(height: 20,),
+        // Possèdes tu le passe sanitaire ?
+        IsDropdown<int>(
+          label: _qPassSanitaire,
+          items: {
+            for (int i = 0; i < _asPassSanitaire.length; ++i)
+              i: _asPassSanitaire[i].answer
+          },
+          currentValue: _currentPassSanitaire,
+          onChanged: (value) {
+            setState(() {
+              _currentPassSanitaire = value ?? 0;
             });
           },
         ),
@@ -766,6 +792,7 @@ class _RegisterPageState extends State<RegisterPage> {
       final formQas = [
         _asMateriauxTI[_currentMateriauxTI],
         _asFisaFise[_currentFisaFise],
+        _asPassSanitaire[_currentPassSanitaire],
         _asTenteESIR[_currentTenteESIR],
         _asRicard[_currentRicard],
         IsFormQA(_qYourPartyType, yourPartyTypeAnswers.toString().replaceFirst(", ", ""), yourPartyTypeScore),
