@@ -1,7 +1,4 @@
 import 'dart:convert';
-
-// ignore: avoid_web_libraries_in_flutter
-import 'dart:html' as html;
 import 'dart:io';
 import 'dart:typed_data';
 
@@ -9,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:isati_integration/utils/colors.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:universal_html/html.dart' as html;
 import 'package:video_player/video_player.dart';
 
 class ProofButton extends StatefulWidget {
