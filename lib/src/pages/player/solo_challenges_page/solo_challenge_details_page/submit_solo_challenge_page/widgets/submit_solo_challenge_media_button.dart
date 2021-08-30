@@ -111,7 +111,7 @@ class _SubmitSoloChallengeMediaButtonState extends State<SubmitSoloChallengeMedi
     }
     else {
       final String path = (await getTemporaryDirectory()).path;
-      final File video = File("$path/${UniqueKey()}");
+      final File video = File("$path/${DateTime.now().microsecondsSinceEpoch}");
       
       await video.writeAsBytes(videoBytes);
 
