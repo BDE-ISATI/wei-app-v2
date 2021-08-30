@@ -15,6 +15,7 @@ import 'package:isati_integration/src/providers/team_validations_store.dart';
 import 'package:isati_integration/src/providers/teams_store.dart';
 import 'package:isati_integration/src/providers/users_store.dart';
 import 'package:isati_integration/src/shared/splash_screen.dart';
+import 'package:isati_integration/utils/app_manager.dart';
 import 'package:isati_integration/utils/colors.dart';
 import 'package:isati_integration/utils/screen_utils.dart';
 import 'package:provider/provider.dart';
@@ -54,6 +55,7 @@ class MyApp extends StatelessWidget {
       builder: (context, child) {
         return MaterialApp(
           title: 'Flutter Demo',
+          navigatorKey: AppManager.instance.appNavigatorKey,
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
             colorScheme:  ColorScheme.fromSwatch(
