@@ -10,6 +10,8 @@ import 'package:isati_integration/utils/screen_utils.dart';
 import 'package:provider/provider.dart';
 
 class PlayerDashboardPage extends StatefulWidget {
+  const PlayerDashboardPage({Key? key}) : super(key: key);
+  
   @override
   _PlayerDashboardPageState createState() => _PlayerDashboardPageState();
 }

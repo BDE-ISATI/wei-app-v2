@@ -11,6 +11,8 @@ import 'package:isati_integration/utils/screen_utils.dart';
 import 'package:provider/provider.dart';
 
 class WaitingSoloValidationsPage extends StatefulWidget {
+  const WaitingSoloValidationsPage({Key? key}) : super(key: key);
+
   @override
   _WaitingSoloValidationsPageState createState() => _WaitingSoloValidationsPageState();
 }

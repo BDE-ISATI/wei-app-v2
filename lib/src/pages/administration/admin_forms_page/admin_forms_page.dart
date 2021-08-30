@@ -12,6 +12,8 @@ import 'package:isati_integration/utils/screen_utils.dart';
 import 'package:provider/provider.dart';
 
 class AdminFormsPage extends StatefulWidget {
+  const AdminFormsPage({Key? key}) : super(key: key);
+  
   @override
   _AdminFormsPageState createState() => _AdminFormsPageState();
 }

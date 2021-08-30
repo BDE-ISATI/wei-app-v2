@@ -9,7 +9,7 @@ import 'package:isati_integration/utils/app_manager.dart';
 
 class PlayerMainPage extends StatelessWidget {
   final List<Widget> pages = [
-    PlayerDashboardPage(),
+    const PlayerDashboardPage(),
     ClipRect(
       child: Navigator(
         key: AppManager.instance.playerSoloChallengesKey,
@@ -33,7 +33,7 @@ class PlayerMainPage extends StatelessWidget {
         key: AppManager.instance.profileKey,
         onGenerateRoute: (route) => MaterialPageRoute<dynamic>(
           settings: route,
-          builder: (context) => AppUserEditProfilePage()
+          builder: (context) => const AppUserEditProfilePage()
         ),
       ),
     ),

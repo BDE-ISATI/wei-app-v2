@@ -12,7 +12,7 @@ class CaptainMainPage extends StatelessWidget {
         key: AppManager.instance.soloWaitingValidationsKey,
         onGenerateRoute: (route) => MaterialPageRoute<dynamic>(
           settings: route,
-          builder: (context) => WaitingSoloValidationsPage()
+          builder: (context) => const WaitingSoloValidationsPage()
         ),
       ),
     ),

@@ -11,6 +11,8 @@ import 'package:isati_integration/utils/screen_utils.dart';
 import 'package:provider/provider.dart';
 
 class AdminSoloChallengesPage extends StatefulWidget {
+  const AdminSoloChallengesPage({Key? key}) : super(key: key);
+  
   @override
   _AdminSoloChallengesPageState createState() => _AdminSoloChallengesPageState();
 }

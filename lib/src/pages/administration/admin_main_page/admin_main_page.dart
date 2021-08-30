@@ -17,7 +17,7 @@ final List<Widget> pages = [
         key: AppManager.instance.soloWaitingValidationsKey,
         onGenerateRoute: (route) => MaterialPageRoute<dynamic>(
           settings: route,
-          builder: (context) => WaitingSoloValidationsPage()
+          builder: (context) => const WaitingSoloValidationsPage()
         ),
       ),
     ),
@@ -26,7 +26,7 @@ final List<Widget> pages = [
         key: AppManager.instance.adminSoloChallengesKey,
         onGenerateRoute: (route) => MaterialPageRoute<dynamic>(
           settings: route,
-          builder: (context) => AdminSoloChallengesPage()
+          builder: (context) => const AdminSoloChallengesPage()
         ),
       ),
     ),
@@ -44,7 +44,7 @@ final List<Widget> pages = [
         key: AppManager.instance.adminTeamChallengesKey,
         onGenerateRoute: (route) => MaterialPageRoute<dynamic>(
           settings: route,
-          builder: (context) => AdminTeamChallengesPage()
+          builder: (context) => const AdminTeamChallengesPage()
         ),
       ),
     ),
@@ -53,7 +53,7 @@ final List<Widget> pages = [
         key: AppManager.instance.adminTeamsKey,
         onGenerateRoute: (route) => MaterialPageRoute<dynamic>(
           settings: route,
-          builder: (context) => AdminTeamsPage()
+          builder: (context) => const AdminTeamsPage()
         ),
       ),
     ),
@@ -62,7 +62,7 @@ final List<Widget> pages = [
         key: AppManager.instance.adminUsersKey,
         onGenerateRoute: (route) => MaterialPageRoute<dynamic>(
           settings: route,
-          builder: (context) => AdminUsersPage()
+          builder: (context) => const AdminUsersPage()
         ),
       ),
     ),
@@ -71,7 +71,7 @@ final List<Widget> pages = [
         key: AppManager.instance.adminFormsKey,
         onGenerateRoute: (route) => MaterialPageRoute<dynamic>(
           settings: route,
-          builder: (context) => AdminFormsPage()
+          builder: (context) => const AdminFormsPage()
         ),
       ),
     ),

@@ -245,7 +245,7 @@ class _UserEditProfilePageState extends State<UserEditProfilePage> {
                       const SizedBox(height: 20,),
                       IsButton(
                         text: "Sauvegarder",
-                        onPressed: () => _onSavePressed(userStore, teamsStore),
+                        onPressed: _onSavePressed,
                       )
                     }
                   ],
@@ -258,7 +258,7 @@ class _UserEditProfilePageState extends State<UserEditProfilePage> {
     );
   }
 
-  Future _onSavePressed(UserStore userStore, TeamsStore teamsStore) async {
+  Future _onSavePressed() async {
     if (!_formKey.currentState!.validate()) {
       return;
     }
@@ -268,6 +268,9 @@ class _UserEditProfilePageState extends State<UserEditProfilePage> {
       _errorMessage = "";
       _sucessMessage = "";
     });
+
+    final UserStore userStore = Provider.of<UserStore>(context, listen: false);
+    final TeamsStore teamsStore = Provider.of<TeamsStore>(context, listen: false);
     
     userStore.user.firstName = _firstNameController.text;
     userStore.user.lastName = _lastNameController.text;

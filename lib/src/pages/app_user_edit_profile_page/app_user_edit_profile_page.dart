@@ -6,6 +6,8 @@ import 'package:isati_integration/src/providers/user_store.dart';
 import 'package:provider/provider.dart';
 
 class AppUserEditProfilePage extends StatelessWidget {
+  const AppUserEditProfilePage({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Consumer2<AppUserStore, TeamsStore>(
