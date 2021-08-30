@@ -64,7 +64,7 @@ class _UserEditProfilePageState extends State<UserEditProfilePage> {
 
         return Scaffold(
           appBar: IsAppBar(
-            title: Text("Modification du profile de ${userToUse.fullName}"),
+            title: Text("Modification du profil de ${userToUse.fullName}"),
           ),
           body: Padding(
             padding: ScreenUtils.instance.defaultPadding,

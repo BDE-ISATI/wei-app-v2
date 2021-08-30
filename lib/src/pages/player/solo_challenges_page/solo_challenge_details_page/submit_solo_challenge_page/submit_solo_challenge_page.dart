@@ -35,7 +35,7 @@ class _SubmitSoloChallengePageState extends State<SubmitSoloChallengePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const IsAppBar(
-        title: Text("Envoyer des preuve"),
+        title: Text("Envoyer des preuves"),
       ),
       body: Padding(
         padding: ScreenUtils.instance.defaultPadding,

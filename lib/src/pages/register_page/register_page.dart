@@ -43,11 +43,11 @@ class _RegisterPageState extends State<RegisterPage> {
 
 
   // "Closed" questions
-  final String _qMateriauxTI = "Est-tu en matériaux ou en TI ?";
+  final String _qMateriauxTI = "Es-tu en matériaux ou en TI ?";
   final List<IsFormQA> _asMateriauxTI = [];
   int _currentMateriauxTI = 0;
 
-  final String _qFisaFise = "Est-tu un FISA ou un FISE";
+  final String _qFisaFise = "Es-tu un FISA ou un FISE";
   final List<IsFormQA> _asFisaFise = [];
   int _currentFisaFise = 0;
 
@@ -71,7 +71,7 @@ class _RegisterPageState extends State<RegisterPage> {
   final List<IsFormQA> _asYourPartyType = [];
   final List<int> _currentYourPartyType = [];
 
-  final String _qBestSunday = "Un dimanche idéale pour moi c’est :";
+  final String _qBestSunday = "Un dimanche idéal pour moi c’est :";
   final List<IsFormQA> _asBestSunday = [];
   final List<int> _currentBestSunday = [];
 
@@ -190,7 +190,7 @@ class _RegisterPageState extends State<RegisterPage> {
       IsFormQA(_qBestSunday, "Dormir jusqu’à 18h pour récupérer de ma soirée de samedi", 3),
       IsFormQA(_qBestSunday, "Aller courir un semi marathon", 2),
       IsFormQA(_qBestSunday, "Animer la messe de ma paroisse", 0),
-      IsFormQA(_qBestSunday, "Rester dans mon chez moi, réviser et planifier la semaine à veni", -2),
+      IsFormQA(_qBestSunday, "Rester dans mon chez moi, réviser et planifier la semaine à venir", -2),
       IsFormQA(_qBestSunday, "Netflix and chill", 0),
       IsFormQA(_qBestSunday, "Voir des potes, boire et recommencer", 3),
       IsFormQA(_qBestSunday, "Développer un projet personnel", 1),

@@ -15,7 +15,7 @@ class PlayerDashboardSoloChallenges extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text("Les défis realisé", style: Theme.of(context).textTheme.headline2,),
+            Text("Les défis réalisés", style: Theme.of(context).textTheme.headline2,),
             const SizedBox(height: 20,),
             Flexible(child: _buildChallengesList(validationsStore, challengesStore))
           ],
