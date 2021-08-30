@@ -269,7 +269,7 @@ class _RegisterPageState extends State<RegisterPage> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               // Header part
-              Text("Bienvenue à votre mois d'intégration !", style: Theme.of(context).textTheme.headline1),
+              Text("Bienvenue pour votre mois d'intégration !", style: Theme.of(context).textTheme.headline1),
               const SizedBox(height: 20,),
               RegisterHeader(),
               const SizedBox(height: 20,),
@@ -292,12 +292,12 @@ class _RegisterPageState extends State<RegisterPage> {
               const Text(
                 "Voici un petit questionnaire qui te permettra "
                 "de t'inscrire et qui nous permettra de te choisir "
-                "une equipe. Répons avec honnêteté." 
+                "une équipe. Réponds avec honnêteté." 
               ),
               const SizedBox(height: 10),
               const Text(
                 "NB : Pas de soucis à te faire, l'application est très "
-                "bien faite, tes données sont sécurisé et seul ton BDE "
+                "bien faite et tes données sont sécurisées. Seul ton BDE "
                 "préféré pourra y avoir accès",
                 style: TextStyle(fontStyle: FontStyle.italic),
               ),

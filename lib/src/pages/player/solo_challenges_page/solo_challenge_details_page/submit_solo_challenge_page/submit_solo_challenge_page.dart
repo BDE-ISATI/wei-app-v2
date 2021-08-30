@@ -145,10 +145,10 @@ class _SubmitSoloChallengePageState extends State<SubmitSoloChallengePage> {
           builder: (context) => AlertDialog(
             title: const Text("Impossible d'importer cette vidéo"),
             content: const Text("Vous ne pouvez pas importer cette vidéo car elle est trop lourde. Essayer de réduire sa "
-                                "taill en ligne avec des outils comme https://www.freeconvert.com/video-compressor"),
+                                "taille en ligne avec des outils comme https://www.freeconvert.com/video-compressor"),
             actions: [
-              InkWell(
-                onTap: () { Navigator.of(context).pop(); },
+              TextButton( 
+                onPressed: () { Navigator.of(context).pop(); },
                 child: const Text("Ok"),
               )
             ],
