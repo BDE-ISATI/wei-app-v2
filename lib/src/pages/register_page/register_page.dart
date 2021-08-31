@@ -794,6 +794,7 @@ class _RegisterPageState extends State<RegisterPage> {
         _asFisaFise[_currentFisaFise],
         _asPassSanitaire[_currentPassSanitaire],
         _asTenteESIR[_currentTenteESIR],
+        _asLoveDrinking[_currentLoveDrinking],
         _asRicard[_currentRicard],
         IsFormQA(_qYourPartyType, yourPartyTypeAnswers.toString().replaceFirst(", ", ""), yourPartyTypeScore),
         IsFormQA(_qBestSunday, bestSundayAnswers.toString().replaceFirst(", ", ""), bestSundayScore),
