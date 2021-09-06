@@ -56,6 +56,8 @@ class WaitingValidationCard extends StatelessWidget {
                     // The user name
                     Text(user.fullName, style: Theme.of(context).textTheme.headline3,),
                     const SizedBox(height: 8,),
+                    Text(user.team!.name),
+                    const SizedBox(height: 8,),
                     Text(
                       soloChallengesStore.challenges[soloValidationStore.validation.challengeId]!.title,
                       style: Theme.of(context).textTheme.headline4,  
