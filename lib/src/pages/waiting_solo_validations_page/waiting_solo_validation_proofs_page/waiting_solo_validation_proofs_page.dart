@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:isati_integration/models/solo_challenge.dart';
 import 'package:isati_integration/services/solo_validations_service.dart';
 import 'package:isati_integration/src/pages/waiting_solo_validations_page/waiting_solo_validation_proofs_page/widgets/proof_button.dart';
 import 'package:isati_integration/src/providers/app_user_store.dart';
+import 'package:isati_integration/src/providers/solo_challenges_store.dart';
 import 'package:isati_integration/src/providers/solo_validation_store.dart';
 import 'package:isati_integration/src/shared/widgets/general/is_app_bar.dart';
 import 'package:isati_integration/src/shared/widgets/general/is_button.dart';
@@ -26,8 +28,10 @@ class _WaitingSoloValidationProofsPageState extends State<WaitingSoloValidationP
 
   @override
   Widget build(BuildContext context) {
-    return Consumer2<SoloValidationStore, AppUserStore>(
-      builder: (context, soloValidationStore, appUserStore, child) {
+    return Consumer3<SoloValidationStore, SoloChallengesStore, AppUserStore>(
+      builder: (context, soloValidationStore, soloChallengesStore, appUserStore, child) {
+        final SoloChallenge challenge = soloChallengesStore.challenges[soloValidationStore.validation.challengeId]!;
+
         return Scaffold(
           appBar: const IsAppBar(
             title: Text("Preuves"),
@@ -49,6 +53,8 @@ class _WaitingSoloValidationProofsPageState extends State<WaitingSoloValidationP
                       message: "Impossible de valider les preuves : $_errorMessage. N'hésite pas à contacter un administrateur si le problème persiste.",
                     )
                   },
+                  Text("Objectifs du défis : ${challenge.description}"),
+                  const SizedBox(height: 8,),
                   Expanded(
                     child: GridView.count(
                       crossAxisCount: ScreenUtils.instance.responsiveCrossAxisCount(context),
@@ -82,6 +88,9 @@ class _WaitingSoloValidationProofsPageState extends State<WaitingSoloValidationP
                       ], 
                     ),
                   ),
+                  Text("Score de base donné : ${challenge.value} point(s)", style: Theme.of(context).textTheme.headline6,),
+                  // ignore: equal_elements_in_set
+                  const SizedBox(height: 8,),
                   Form(
                     key: _extraPointsState,
                     child: IsTextInput(
