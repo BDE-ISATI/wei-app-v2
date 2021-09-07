@@ -5,6 +5,8 @@ import 'package:isati_integration/src/pages/main_page/main_page.dart';
 import 'package:isati_integration/src/pages/player/player_dashboard_page/player_dashboard_page.dart';
 import 'package:isati_integration/src/pages/player/solo_challenges_page/solo_challenges_page.dart';
 import 'package:isati_integration/src/pages/team_challenges_page/team_challenges_page.dart';
+import 'package:isati_integration/src/pages/teams_rank_page/teams_ranking_page.dart';
+import 'package:isati_integration/src/pages/users_ranking_page/users_ranking_page.dart';
 import 'package:isati_integration/utils/app_manager.dart';
 
 class PlayerMainPage extends StatelessWidget {
@@ -28,6 +30,8 @@ class PlayerMainPage extends StatelessWidget {
         ),
       ),
     ),
+    const UsersRankingPage(),
+    const TeamsRankingPage(),
     ClipRect(
       child: Navigator(
         key: AppManager.instance.profileKey,
@@ -57,6 +61,16 @@ class PlayerMainPage extends StatelessWidget {
     ),
     PageItem(
       index: 3,
+      title: "Classement des joueurs",
+      icon: Icons.emoji_events
+    ),
+    PageItem(
+      index: 4,
+      title: "Classement des équipes",
+      icon: Icons.emoji_events
+    ),
+    PageItem(
+      index: 5,
       title: "Mon profil",
       icon: Icons.account_circle
     ),

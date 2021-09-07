@@ -11,10 +11,13 @@ class TeamRankingCard extends StatelessWidget {
     Key? key, 
     this.width,
     required this.rank,
+    this.highlight = false,
   }) : super(key: key);
 
   final double? width;
   final int rank;
+
+  final bool highlight;
 
   @override
   Widget build(BuildContext context) {
@@ -24,6 +27,8 @@ class TeamRankingCard extends StatelessWidget {
 
         return IsCard(
           width: width,
+          borderColor: highlight ? colorPrimary : colorScaffolddWhite,
+          borderWidth: 5.0,
           child: Row(
             children: [
               // The team logo

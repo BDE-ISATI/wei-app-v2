@@ -63,26 +63,31 @@ class _TeamsRankingPageState extends State<TeamsRankingPage> {
   }
 
   Widget _buildTeamsList({required List<Team> teams}) {
-    return RefreshIndicator(
-      onRefresh: () => _loadData(forceRefresh: true),
-      child: SingleChildScrollView(
-        physics: const AlwaysScrollableScrollPhysics(),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            for (int i = 0; i < teams.length; ++i) ...{
-              ChangeNotifierProvider(
-                create: (context) => TeamStore(teams[i]),
-                builder: (context, child) => TeamRankingCard(
-                  rank: i + 1,
-                ),
-              ),
-              const SizedBox(height: 16,),
-            }
-          ],
-        ),
-      ),
+    return Consumer<AppUserStore>(
+      builder: (context, appUserStore, child) {
+        return RefreshIndicator(
+          onRefresh: () => _loadData(forceRefresh: true),
+          child: SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                for (int i = 0; i < teams.length; ++i) ...{
+                  ChangeNotifierProvider(
+                    create: (context) => TeamStore(teams[i]),
+                    builder: (context, child) => TeamRankingCard(
+                      rank: i + 1,
+                      highlight: appUserStore.user!.team?.id == teams[i].id,
+                    ),
+                  ),
+                  const SizedBox(height: 16,),
+                }
+              ],
+            ),
+          ),
+        );
+      }
     );
   }
 
