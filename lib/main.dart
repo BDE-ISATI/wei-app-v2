@@ -12,6 +12,7 @@ import 'package:isati_integration/src/providers/team_challenges_store.dart';
 import 'package:isati_integration/src/providers/team_validations_store.dart';
 import 'package:isati_integration/src/providers/teams_ranking_store.dart';
 import 'package:isati_integration/src/providers/teams_store.dart';
+import 'package:isati_integration/src/providers/users_ranking_store.dart';
 import 'package:isati_integration/src/providers/users_store.dart';
 import 'package:isati_integration/src/shared/splash_screen.dart';
 import 'package:isati_integration/utils/app_manager.dart';
@@ -51,6 +52,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => TeamChallengesStore()),
         ChangeNotifierProvider(create: (context) => TeamValidationsStore()),
         ChangeNotifierProvider(create: (context) => TeamsRankingStore()),
+        ChangeNotifierProvider(create: (context) => UsersRankingStore()),
       ],
       builder: (context, child) {
         return MaterialApp(

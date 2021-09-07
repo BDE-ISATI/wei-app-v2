@@ -10,6 +10,7 @@ class IsCard extends StatelessWidget {
     this.padding = const EdgeInsets.symmetric(vertical: 15.0, horizontal: 15.0),  
     required this.child,
     this.borderColor,
+    this.borderWidth = 1.0,
   }) : super(key: key);
 
   final Widget child;
@@ -23,6 +24,7 @@ class IsCard extends StatelessWidget {
   final EdgeInsetsGeometry padding;
 
   final Color? borderColor;
+  final double borderWidth;
 
   @override
   Widget build(BuildContext context) {
@@ -36,6 +38,7 @@ class IsCard extends StatelessWidget {
         color: Theme.of(context).cardColor,
         border: borderColor != null ? Border.all(
           color: borderColor!,
+          width: borderWidth
         ) : null,
         borderRadius: const BorderRadius.all(Radius.circular(8.0)),
         boxShadow: const [

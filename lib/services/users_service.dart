@@ -43,6 +43,34 @@ class UsersService {
     throw PlatformException(code: response.statusCode.toString(), message: response.body);
   }
 
+  Future<Map<String, User>> getRankedUsers(String authorization) async {
+    final http.Response response = await http.get(
+      Uri.parse("$serviceBaseUrl/ranked"),
+      headers: <String, String>{
+        HttpHeaders.authorizationHeader: authorization
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final List<dynamic> jsonUsers = jsonDecode(response.body) as List<dynamic>;
+      final Map<String, User> users = {};
+
+      for (final map in jsonUsers) {
+        Team? userTeam;      
+
+        if ((map['teamId'] as String?) != null) {
+          userTeam = await TeamsService.instance.getTeam(map["teamId"] as String, authorization: authorization);
+        }
+        
+        users[map['id'] as String] = User.fromMap(map as Map<String, dynamic>, team: userTeam);
+      }
+
+      return users;
+    }
+
+    throw PlatformException(code: response.statusCode.toString(), message: response.body);
+  }
+
   Future<User> getUser(String id, {required String authorization}) async {
     final http.Response response = await http.get(
       Uri.parse("$serviceBaseUrl/$id"),
