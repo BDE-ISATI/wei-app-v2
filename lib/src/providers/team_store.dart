@@ -26,4 +26,6 @@ class TeamStore with ChangeNotifier {
 
     notifyListeners();
   }
+
+  int get score => team.score;
 }

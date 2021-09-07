@@ -7,6 +7,7 @@ import 'package:isati_integration/src/pages/administration/admin_teams_page/admi
 import 'package:isati_integration/src/pages/administration/admin_users_page/admin_users_page.dart';
 import 'package:isati_integration/src/pages/main_page/main_page.dart';
 import 'package:isati_integration/src/pages/team_challenges_page/team_challenges_page.dart';
+import 'package:isati_integration/src/pages/teams_rank_page/teams_ranking_page.dart';
 import 'package:isati_integration/src/pages/waiting_solo_validations_page/waiting_solo_validation_page.dart';
 import 'package:isati_integration/utils/app_manager.dart';
 
@@ -48,6 +49,7 @@ final List<Widget> pages = [
         ),
       ),
     ),
+    const TeamsRankingPage(),
     ClipRect(
       child: Navigator(
         key: AppManager.instance.adminTeamsKey,
@@ -100,16 +102,21 @@ final List<Widget> pages = [
     ),
     PageItem(
       index: 4,
-      title: "Les équipes",
+      title: "Classement des équipes",
       icon: Icons.people
     ),
     PageItem(
       index: 5,
+      title: "Les équipes",
+      icon: Icons.people
+    ),
+    PageItem(
+      index: 6,
       title: "Les utilisateurs",
       icon: Icons.account_circle
     ),
     PageItem(
-      index: 6,
+      index: 7,
       title: "Les questionnaires",
       icon: Icons.question_answer
     ),
